@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "start": "node server/index.js",
     "dev": "concurrently \"nodemon server/index.js\" \"cd client && npm run start\"",
     "build": "cd client && npm install && npm run build && cd ..",
     "heroku-postbuild": "npm run build",
