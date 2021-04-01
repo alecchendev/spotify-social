@@ -1,0 +1,29 @@
+{
+  "name": "my-spotify-social",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"nodemon server/index.js\" \"cd client && npm run start\"",
+    "build": "cd client && npm run build && cd ..",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alecchendev/spotify-social.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alecchendev/spotify-social/issues"
+  },
+  "homepage": "https://github.com/alecchendev/spotify-social#readme",
+  "dependencies": {
+    "concurrently": "^6.0.0",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.7",
+    "path": "^0.12.7"
+  }
+}
