@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "concurrently \"nodemon server/index.js\" \"cd client && npm run start\"",
-    "build": "cd client && npm run build && cd ..",
+    "build": "cd client && npm install && npm run build && cd ..",
+    "heroku-postbuild": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
