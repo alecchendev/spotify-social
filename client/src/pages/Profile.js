@@ -54,14 +54,22 @@ export default function Profile() {
 					</div>
 
 					<div className={styles.current}>
-						<Kicker>Currently Playing</Kicker>
+						{
+							profileData.current !== ''
+							?
+							<Kicker>Currently Playing</Kicker>
+							:
+							<Kicker>Last Played</Kicker>
+							// <Text>Not playing anything atm.</Text>
+						}
 						<div className={styles.currentContent}>
 							{
 								profileData.current !== ''
 								?
 								<Track item={profileData.current.item} />
 								:
-								<Text>Not playing anything atm.</Text>
+								<Track item={profileData.recent.items[0].track}/>
+								// <Text>Not playing anything atm.</Text>
 							}
 						</div>
 					</div>
