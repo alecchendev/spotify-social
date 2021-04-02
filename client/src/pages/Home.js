@@ -16,7 +16,7 @@ export default function Home() {
 		<div>
 			<h1>Home component.</h1>
 			<input type='text' placeholder='Search' onChange={handleChange} />
-			<Link to={'/search#username=' + search}><button>Search</button></Link>
+			<Link to={'/search?username=' + search}><button>Search</button></Link>
 			<a href={url + '/' + API_VERSION + '/login'}><button>Login</button></a>
 		</div>
 	)

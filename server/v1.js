@@ -94,12 +94,45 @@ router.get('/callback', async (req, res) => {
 
 });
 
-router.get('/search', (req, res) => {
+router.get('/search', async (req, res) => {
 	const username = req.query.username;
-	res.send({
-		message: 'It worked!',
-		username: username
-	});
+	console.log(username);
+
+	try {
+		const authRes = await axios({
+			method: 'post',
+			url: 'https://accounts.spotify.com/api/token',
+			params: {
+				grant_type: 'client_credentials'
+			},
+			headers: { 
+				'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64')),
+				'Content-Type': 'application/x-www-form-urlencoded' 
+			},
+			json: true
+		});
+
+		const { access_token, token_type } = authRes.data;
+		const searchRes = await axios({
+			method: 'get',
+			url: 'https://api.spotify.com/v1/search',
+			params: {
+				q: username,
+				type: 'playlist'
+			},
+			headers: {
+				'Authorization': [token_type, access_token].join(' ')
+			}
+		})
+		res.send(searchRes.data);
+
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t get token.'
+		})
+	}
+
 })
 
 router.get('/:id', async (req, res) => {
