@@ -12,7 +12,7 @@
 }
 
 .profileImg {
-	width: auto;
+	width: 100%;
 	height: 100%;
 }
 
@@ -21,6 +21,36 @@
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+}
+
+.current {
+	margin-top: 50px;
+}
+
+.currentContent {
+	margin-top: 10px;
+}
+
+.currentPlaying {
+	display: flex;
+}
+
+.trackBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 25px;
+}
+
+.albumBox {
+	width: 100px;
+	height: 100px;
+	background-color: gray;
+}
+
+.albumImg {
+	width: 100%;
+	height: 100%;
 }
 
 @media screen and (max-width: 50rem) {
