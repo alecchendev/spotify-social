@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { getSearchResults } from '../lib/api.js';
 import { getQueryParams } from '../lib/utils.js';
+import Button from '../components/button.js';
+import Heading from '../components/heading.js';
 
 
 export default function Search() {
@@ -27,9 +29,10 @@ export default function Search() {
 
 	return (
 		<div>
-			<h1>Search component.</h1>
+			<Heading>Search component.</Heading>
 			{JSON.stringify(searchResults)}
-			<Link to='/'><button>Home</button></Link>
+			<br/>
+			<Link to='/'><Button>Home</Button></Link>
 		</div>
 	)
 }

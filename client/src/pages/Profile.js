@@ -1,6 +1,8 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getProfileData } from '../lib/api.js';
+import Button from '../components/button.js';
+import Heading from '../components/heading.js';
 
 export default function Profile() {
 
@@ -28,9 +30,10 @@ export default function Profile() {
 
 	return (
 		<div>
-			<h1>Profile component.</h1>
+			<Heading>Profile component.</Heading>
 			{JSON.stringify(profileData)}
-			<Link to='/'><button>Home</button></Link>
+			<br/>
+			<Link to='/'><Button>Home</Button></Link>
 		</div>
 	)
 }

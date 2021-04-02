@@ -1,0 +1,23 @@
+
+.inputFlex {
+	display: flex;
+	justify-content: space-between;
+}
+
+.searchBox {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.loginBox {
+	width: 30%;
+	display: flex;
+	flex-direction: row-reverse;
+}
+
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
