@@ -168,6 +168,8 @@ router.get('/:id', async (req, res) => {
 
 		const accessRes = await axios(authOptions);
 		const { access_token, token_type } = accessRes.data;	
+
+		// Get user
 		const userOptions = {
 			method: 'get',
 			url: 'https://api.spotify.com/v1/me',
@@ -177,14 +179,70 @@ router.get('/:id', async (req, res) => {
 			json: true
 		};
 		const userRes = await axios(userOptions);
+
+		const artistOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/top/artists',
+			params: {
+				time_range: 'medium_term'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const artistRes = await axios(artistOptions);
+
+
+		const trackOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/top/tracks',
+			params: {
+				time_range: 'short_term'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const trackRes = await axios(trackOptions);
+
+		const currentOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/player/currently-playing',
+			params: {
+				market: 'from_token'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const currentRes = await axios(currentOptions);
+
+
+		const recentOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/player/recently-played',
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const recentRes = await axios(recentOptions);
+
 		res.send({
-			data: userRes.data
+			user: userRes.data,
+			artists: artistRes.data,
+			tracks: trackRes.data,
+			current: currentRes.data,
+			recent: recentRes.data
 		});
 
 	} catch (err) {
 		console.log(err);
 		res.send({
-			message: 'Spotify API request didn\'t work'
+			message: 'Something went wrong :('
 		});
 	}
 	
