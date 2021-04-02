@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { Home, Profile, Search } from './pages/index.js';
-import Layout from './layout.js';
+import Layout from './components/layout.js';
 import './styles/index.css';
 
 function App() {

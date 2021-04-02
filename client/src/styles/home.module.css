@@ -1,8 +1,4 @@
 
-.inputFlex {
-	display: flex;
-	justify-content: space-between;
-}
 
 .searchBox {
 	width: 80%;
@@ -10,14 +6,29 @@
 	justify-content: space-between;
 }
 
-.loginBox {
-	width: 30%;
-	display: flex;
-	flex-direction: row-reverse;
-}
-
 .vertAlign {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+}
+
+@media screen and (max-width: 50rem) {
+
+	a, button {
+		width: 100%;
+	}
+
+	.vertAlign {
+		flex-direction: row;
+		justify-content: center;
+		width: 50%;
+		margin: auto;
+		margin-top: 20px;
+	}
+
+	.searchBox {
+		width: 100%;
+		flex-direction: column;
+	}
+
 }

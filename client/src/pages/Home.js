@@ -21,15 +21,13 @@ export default function Home() {
 		<div>
 			<Heading>Spotify Social</Heading>
 			<Text>Search for your friends' profiles or login to activate your own.</Text>
-			<div className={styles.inputFlex}>
-				<div className={styles.searchBox}>
-					<TextInput type='text' placeholder='Search' onChange={handleChange} />
-					<div className={styles.vertAlign}>
-						<Link to={'/search?username=' + search}><Button>Search</Button></Link>
-					</div>
-					<div className={styles.vertAlign}>
-						<a href={url + '/' + API_VERSION + '/login'}><Button>Login</Button></a>
-					</div>
+			<div className={styles.searchBox}>
+				<TextInput type='text' placeholder='Search' onChange={handleChange} />
+				<div className={styles.vertAlign}>
+					<Link to={'/search?username=' + search}><Button>Search</Button></Link>
+				</div>
+				<div className={styles.vertAlign}>
+					<a href={url + '/' + API_VERSION + '/login'}><Button>Login</Button></a>
 				</div>
 			</div>
 		</div>
