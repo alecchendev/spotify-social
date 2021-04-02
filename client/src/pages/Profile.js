@@ -3,6 +3,9 @@ import { Link, useParams } from 'react-router-dom';
 import { getProfileData } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
+import Kicker from '../components/kicker.js';
+import Text from '../components/text.js';
+import styles from '../styles/profile.module.css';
 
 export default function Profile() {
 
@@ -30,8 +33,28 @@ export default function Profile() {
 
 	return (
 		<div>
-			<Heading>Profile</Heading>
-			{JSON.stringify(profileData)}
+			{
+				(profileData
+				&& Object.keys(profileData).length !== 0)
+				?
+				<div className={styles.header}>
+					<div className={styles.imgBox}>
+						{profileData.user.images.length > 0 &&
+						<img className={styles.profileImg} alt='Profile image' src={profileData.user.images[0].url}/>
+						}
+					</div>
+
+					<div className={styles.headerBox}>
+						<Kicker>Profile</Kicker>
+						<Heading>{profileData.user.display_name}</Heading>
+						<Text>{profileData.user.followers.total} Followers</Text>
+					</div>
+				</div>
+				:
+				<div>
+					Loading...
+				</div>
+			}
 			<br/>
 			<Link to='/'><Button>Home</Button></Link>
 		</div>

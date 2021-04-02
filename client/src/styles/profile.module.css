@@ -1,0 +1,44 @@
+
+.header {
+	display: flex;
+}
+
+.imgBox {
+	width: 250px;
+	height: 250px;
+	border-radius: 9999px;
+	overflow: hidden;
+	background-color: gray;
+}
+
+.profileImg {
+	width: auto;
+	height: 100%;
+}
+
+.headerBox {
+	margin-left: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+@media screen and (max-width: 50rem) {
+
+	.header {
+		flex-direction: column;
+		margin: auto;
+	}
+
+	.imgBox {
+		margin: auto;
+	}
+
+	.headerBox {
+		margin: 0;
+		text-align: center;
+	}
+
+
+
+}
