@@ -10,3 +10,7 @@ export async function getSearchResults(queryParams) {
 
 }
 
+export async function getProfileData(id) {
+	console.log('Called getProfileData');
+	return await axios(url + '/' + API_VERSION + '/' + id);
+}

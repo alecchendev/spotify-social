@@ -14,7 +14,6 @@ export default function Search() {
 
 			try {
 				const searchRes = await getSearchResults(queryParams);
-				console.log(searchRes);
 				setSearchResults(searchRes.data);
 			} catch (err) {
 				console.log(err);
@@ -22,7 +21,6 @@ export default function Search() {
 
 		};
 		const queryParams = getQueryParams();
-		console.log(queryParams);
 		callApi(queryParams);
 
 	}, []);
@@ -31,6 +29,7 @@ export default function Search() {
 		<div>
 			<h1>Search component.</h1>
 			{JSON.stringify(searchResults)}
+			<Link to='/'><button>Home</button></Link>
 		</div>
 	)
 }

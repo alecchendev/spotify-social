@@ -10,6 +10,10 @@ app.use(cors());
 
 app.use(express.static(path.join(__dirname, '../client/build')));
 
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../client/build/index.html'));
+});
+
 app.use('/' + process.env.API_VERSION, api);
 
 const port = process.env.PORT || 5000 || '0.0.0.0';
