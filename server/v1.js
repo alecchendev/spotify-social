@@ -1,5 +1,6 @@
 require('dotenv').config({ path: require('find-config')('.env') });
 const { generateRandomString } = require('./utils');
+const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent } = require('./spotify');
 const querystring = require('querystring');
 const axios = require('axios');
 const express = require('express');
@@ -29,7 +30,6 @@ const scope = [
 
 router.get('/login', (req, res) => {
 
-
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -45,36 +45,13 @@ router.get('/callback', async (req, res) => {
 
 	const code = req.query.code;
 
-	const authOptions = {
-		method: 'post',
-		url: 'https://accounts.spotify.com/api/token',
-		params: {
-			code: code,
-			redirect_uri: redirectUri,
-			grant_type: 'authorization_code'
-		},
-		headers: {
-			'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64')),
-		},
-		json: true
-	};
-
 	try {
 
-		const authRes = await axios(authOptions);
-		// console.log(authRes);
-		const { access_token, token_type, refresh_token } = authRes.data;
-		console.log([access_token, token_type, refresh_token].join('\n'));
+		const authRes = await getAuth(clientId, clientSecret, 'authorization_code', code, redirectUri);
 
-		const userOptions = {
-			method: 'get',
-      url: 'https://api.spotify.com/v1/me',
-      headers: { 
-        'Authorization': [token_type, access_token].join(' '),
-      },
-      json: true
-		};
-		const userRes = await axios(userOptions);
+		const { access_token, token_type, refresh_token } = authRes.data;
+
+		const userRes = await getUser(token_type, access_token);
 
 		const id = userRes.data.id;
 
@@ -100,95 +77,26 @@ router.get('/callback', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
-	let refreshToken = '';
 	try {
 		const queryRes = await client.query(query, [ id ]);
 
-		if (queryRes.rows.length > 0) {
-			refreshToken = queryRes.rows[0].refresh_token;
-		}
-
-		if (refreshToken === '') {
+		if (queryRes.rows.length === 0) {
 			res.send({
 				message: 'Couldn\'t get refresh token.'
 			});
 		}
 
-		var authOptions = {
-			method: 'post',
-			url: 'https://accounts.spotify.com/api/token',
-			headers: { 'Authorization': 'Basic ' + (new Buffer(clientId + ':' + clientSecret).toString('base64')) },
-			params: {
-				grant_type: 'refresh_token',
-				refresh_token: refreshToken
-			},
-			json: true
-		};
+		const refreshToken = queryRes.rows[0].refresh_token;
 
-		const accessRes = await axios(authOptions);
+		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
 		const { access_token, token_type } = accessRes.data;	
 
-		// Get user
-		const userOptions = {
-			method: 'get',
-			url: 'https://api.spotify.com/v1/me',
-			headers: { 
-				'Authorization': [token_type, access_token].join(' '),
-			},
-			json: true
-		};
-		const userRes = await axios(userOptions);
-
-		const artistOptions = {
-			method: 'get',
-			url: 'https://api.spotify.com/v1/me/top/artists',
-			params: {
-				time_range: 'medium_term'
-			},
-			headers: { 
-				'Authorization': [token_type, access_token].join(' '),
-			},
-			json: true
-		};
-		const artistRes = await axios(artistOptions);
-
-
-		const trackOptions = {
-			method: 'get',
-			url: 'https://api.spotify.com/v1/me/top/tracks',
-			params: {
-				time_range: 'short_term'
-			},
-			headers: { 
-				'Authorization': [token_type, access_token].join(' '),
-			},
-			json: true
-		};
-		const trackRes = await axios(trackOptions);
-
-		const currentOptions = {
-			method: 'get',
-			url: 'https://api.spotify.com/v1/me/player/currently-playing',
-			params: {
-				market: 'from_token'
-			},
-			headers: { 
-				'Authorization': [token_type, access_token].join(' '),
-			},
-			json: true
-		};
-		const currentRes = await axios(currentOptions);
-
-
-		const recentOptions = {
-			method: 'get',
-			url: 'https://api.spotify.com/v1/me/player/recently-played',
-			headers: { 
-				'Authorization': [token_type, access_token].join(' '),
-			},
-			json: true
-		};
-		const recentRes = await axios(recentOptions);
+		// Retrieve data from Spotify API
+		const userRes = await getUser(token_type, access_token);
+		const artistRes = await getArtists(token_type, access_token, 'medium_term', 20);
+		const trackRes = await getTracks(token_type, access_token, 'short_term', 20);
+		const currentRes = await getCurrent(token_type, access_token);
+		const recentRes = await getRecent(token_type, access_token);
 
 		res.send({
 			user: userRes.data,
