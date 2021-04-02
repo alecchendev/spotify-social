@@ -80,10 +80,9 @@ router.get('/callback', async (req, res) => {
 
 		const query = `insert into users (user_id, refresh_token) values ($1, $2)
 									ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token;`;
-		client.query(query, [ id, refresh_token ], (err, resq) => {
-			if (err) throw err;
-			console.log('Created user: ' + id);
-		});
+
+		const queryRes = await client.query(query, [ id, refresh_token ]);
+		console.log('Created user: ' + id);
 
 		res.redirect(frontendUrl + '/' + id);
 
@@ -143,17 +142,19 @@ router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
 	let refreshToken = '';
-	client.query(query, [ id ], async (err, resq) => {
-		if (err) throw err;
-		console.log(resq.rows[0].refresh_token);
-		refreshToken = resq.rows[0].refresh_token;
+	try {
+		const queryRes = await client.query(query, [ id ]);
+
+		if (queryRes.rows.length > 0) {
+			refreshToken = queryRes.rows[0].refresh_token;
+		}
 
 		if (refreshToken === '') {
 			res.send({
 				message: 'Couldn\'t get refresh token.'
 			});
 		}
-	
+
 		var authOptions = {
 			method: 'post',
 			url: 'https://accounts.spotify.com/api/token',
@@ -164,31 +165,28 @@ router.get('/:id', async (req, res) => {
 			},
 			json: true
 		};
-	
-		try {
-			const accessRes = await axios(authOptions);
-			const { access_token, token_type } = accessRes.data;	
-			const userOptions = {
-				method: 'get',
-				url: 'https://api.spotify.com/v1/me',
-				headers: { 
-					'Authorization': [token_type, access_token].join(' '),
-				},
-				json: true
-			};
-			const userRes = await axios(userOptions);
-			res.send({
-				data: userRes.data
-			});
-	
-	
-		} catch (err) {
-			console.log(err);
-			res.send({
-				message: 'Spotify API request didn\'t work'
-			})
-		}
-	});
+
+		const accessRes = await axios(authOptions);
+		const { access_token, token_type } = accessRes.data;	
+		const userOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me',
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const userRes = await axios(userOptions);
+		res.send({
+			data: userRes.data
+		});
+
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Spotify API request didn\'t work'
+		});
+	}
 	
 
 });
