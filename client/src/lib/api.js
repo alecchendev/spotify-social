@@ -6,11 +6,13 @@ const API_VERSION = 'v1'; // TEMPORARY FIX LATER
 
 export async function getSearchResults(queryParams) {
 	console.log('Called getSearchResults');
-	return await axios(url + '/' + API_VERSION + '/search?' + querystring.stringify(queryParams));
+	return await axios.get(url + '/' + API_VERSION + '/search?' + querystring.stringify(queryParams));
 
 }
 
 export async function getProfileData(id) {
 	console.log('Called getProfileData');
-	return await axios(url + '/' + API_VERSION + '/' + id);
+	console.log(url + '/' + API_VERSION + '/' + id);
+	console.log('asdfasdf');
+	return await axios.get('http://localhost:5000' + '/' + API_VERSION + '/' + id);
 }
