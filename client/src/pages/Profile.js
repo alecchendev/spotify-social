@@ -30,7 +30,7 @@ export default function Profile() {
 
 	return (
 		<div>
-			<Heading>Profile component.</Heading>
+			<Heading>Profile</Heading>
 			{JSON.stringify(profileData)}
 			<br/>
 			<Link to='/'><Button>Home</Button></Link>

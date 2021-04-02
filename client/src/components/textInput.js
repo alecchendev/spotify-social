@@ -6,6 +6,8 @@ const TextInput = styled.input`
 	padding: 10px;
 	font-family: DM Sans;
 	font-size: 1.1em;
+	border: none;
+	border-radius: 5px;
 	outline: none;
 
 `;

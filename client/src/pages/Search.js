@@ -29,7 +29,7 @@ export default function Search() {
 
 	return (
 		<div>
-			<Heading>Search component.</Heading>
+			<Heading>Search Results</Heading>
 			{JSON.stringify(searchResults)}
 			<br/>
 			<Link to='/'><Button>Home</Button></Link>
