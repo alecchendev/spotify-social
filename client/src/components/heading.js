@@ -5,6 +5,7 @@ const Heading = styled.h1`
 	font-weight: 700;
 	margin-top: 0;
 	margin-bottom: 0;
+	overflow-wrap: break-word;
 
 
 `;
