@@ -16,11 +16,14 @@ const client = new Client({
 client.connect();
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const scope = [
-	'user-top-read'
+	'user-top-read',
+	'user-read-currently-playing',
+	'user-read-recently-played'
 ].join(' ');
 
 
@@ -75,13 +78,14 @@ router.get('/callback', async (req, res) => {
 
 		const id = userRes.data.id;
 
-		const query = `insert into users (user_id, refresh_token) values ($1, $2) ON CONFLICT DO NOTHING;`;
+		const query = `insert into users (user_id, refresh_token) values ($1, $2)
+									ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token;`;
 		client.query(query, [ id, refresh_token ], (err, resq) => {
 			if (err) throw err;
 			console.log('Created user: ' + id);
 		});
 
-		res.redirect('/' + id);
+		res.redirect(frontendUrl + '/' + id);
 
 	} catch (err) {
 
