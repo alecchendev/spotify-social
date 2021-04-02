@@ -1,9 +1,13 @@
 
+.subtitle {
+	margin-top: 15px;
+}
 
 .searchBox {
 	width: 80%;
 	display: flex;
 	justify-content: space-between;
+	margin-top: 20px;
 }
 
 .vertAlign {

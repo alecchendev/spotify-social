@@ -4,9 +4,8 @@ import { getProfileData } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
-import Text from '../components/text.js';
-import Subtext from '../components/subtext.js';
 import styles from '../styles/profile.module.css';
+import { Track, Artist, Text } from '../components';
 
 export default function Profile() {
 
@@ -60,32 +59,37 @@ export default function Profile() {
 							{
 								profileData.current !== ''
 								?
-								<div className={styles.currentPlaying}>
-									<div className={styles.albumBox}>
-									{
-										profileData.current.item && profileData.current.item.album.images.length > 0 &&
-										<img className={styles.albumImg} alt='Currently playing album cover' src={profileData.current.item.album.images[0].url}/>
-									}
-									</div>
-
-									<div className={styles.trackBox}>
-										{
-											profileData.current.item
-											?
-											<div>
-												<Text>{profileData.current.item.name}</Text>
-												<Subtext>{profileData.current.item.artists.map(artist => artist.name).join(', ')}</Subtext>
-											</div>
-											:
-											<Text>Playing advertisment... refresh in a little.</Text>
-										}
-									</div>
-
-								</div>
+								<Track item={profileData.current.item} />
 								:
 								<Text>Not playing anything atm.</Text>
 							}
 						</div>
+					</div>
+
+					<div className={styles.top}>
+
+						<div className={styles.topSection}>
+							<Kicker>Top Tracks</Kicker>
+							{profileData.tracks.items.map(track => {
+								return (
+									<div className={styles.item}>
+										<Track item={track}/>
+									</div>
+								);
+							})}
+						</div>
+
+						<div className={styles.topSection}>
+							<Kicker>Top Artists</Kicker>
+							{profileData.artists.items.map(artist => {
+								return (
+									<div className={styles.item}>
+									<Artist item={artist}/>
+									</div>
+									);
+								})}
+						</div>
+
 					</div>
 				</div>
 				:
