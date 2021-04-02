@@ -1,0 +1,34 @@
+
+
+.searchBox {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+}
+
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+@media screen and (max-width: 50rem) {
+
+	a, button {
+		width: 100%;
+	}
+
+	.vertAlign {
+		flex-direction: row;
+		justify-content: center;
+		width: 50%;
+		margin: auto;
+		margin-top: 20px;
+	}
+
+	.searchBox {
+		width: 100%;
+		flex-direction: column;
+	}
+
+}

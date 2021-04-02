@@ -1,0 +1,19 @@
+
+:root {
+	--desktop-width: 50rem;
+	--mobile-width: 85%;
+}
+
+.wrapper {
+	max-width: var(--desktop-width);
+	padding-top: 100px;
+	margin: auto;
+}
+
+@media screen and (max-width: 58.8rem) {
+
+	.wrapper {
+		max-width: var(--mobile-width);
+	}
+
+}
