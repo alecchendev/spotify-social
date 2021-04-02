@@ -20,7 +20,7 @@ export default function Home() {
 	return (
 		<div>
 			<Heading>Spotify Social</Heading>
-			<Text>Search for your friends' profiles or login to activate your own.</Text>
+			<Text className={styles.subtitle}>Search for your friends' profiles or login to activate your own.</Text>
 			<div className={styles.searchBox}>
 				<TextInput type='text' placeholder='Search' onChange={handleChange} />
 				<div className={styles.vertAlign}>

@@ -16,11 +16,14 @@ const client = new Client({
 client.connect();
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;
 const scope = [
-	'user-top-read'
+	'user-top-read',
+	'user-read-currently-playing',
+	'user-read-recently-played'
 ].join(' ');
 
 
@@ -75,13 +78,13 @@ router.get('/callback', async (req, res) => {
 
 		const id = userRes.data.id;
 
-		const query = `insert into users (user_id, refresh_token) values ($1, $2) ON CONFLICT DO NOTHING;`;
-		client.query(query, [ id, refresh_token ], (err, resq) => {
-			if (err) throw err;
-			console.log('Created user: ' + id);
-		});
+		const query = `insert into users (user_id, refresh_token) values ($1, $2)
+									ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token;`;
 
-		res.redirect('/' + id);
+		const queryRes = await client.query(query, [ id, refresh_token ]);
+		console.log('Created user: ' + id);
+
+		res.redirect(frontendUrl + '/' + id);
 
 	} catch (err) {
 
@@ -139,17 +142,19 @@ router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
 	let refreshToken = '';
-	client.query(query, [ id ], async (err, resq) => {
-		if (err) throw err;
-		console.log(resq.rows[0].refresh_token);
-		refreshToken = resq.rows[0].refresh_token;
+	try {
+		const queryRes = await client.query(query, [ id ]);
+
+		if (queryRes.rows.length > 0) {
+			refreshToken = queryRes.rows[0].refresh_token;
+		}
 
 		if (refreshToken === '') {
 			res.send({
 				message: 'Couldn\'t get refresh token.'
 			});
 		}
-	
+
 		var authOptions = {
 			method: 'post',
 			url: 'https://accounts.spotify.com/api/token',
@@ -160,31 +165,86 @@ router.get('/:id', async (req, res) => {
 			},
 			json: true
 		};
-	
-		try {
-			const accessRes = await axios(authOptions);
-			const { access_token, token_type } = accessRes.data;	
-			const userOptions = {
-				method: 'get',
-				url: 'https://api.spotify.com/v1/me',
-				headers: { 
-					'Authorization': [token_type, access_token].join(' '),
-				},
-				json: true
-			};
-			const userRes = await axios(userOptions);
-			res.send({
-				data: userRes.data
-			});
-	
-	
-		} catch (err) {
-			console.log(err);
-			res.send({
-				message: 'Spotify API request didn\'t work'
-			})
-		}
-	});
+
+		const accessRes = await axios(authOptions);
+		const { access_token, token_type } = accessRes.data;	
+
+		// Get user
+		const userOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me',
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const userRes = await axios(userOptions);
+
+		const artistOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/top/artists',
+			params: {
+				time_range: 'medium_term'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const artistRes = await axios(artistOptions);
+
+
+		const trackOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/top/tracks',
+			params: {
+				time_range: 'short_term'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const trackRes = await axios(trackOptions);
+
+		const currentOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/player/currently-playing',
+			params: {
+				market: 'from_token'
+			},
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const currentRes = await axios(currentOptions);
+
+
+		const recentOptions = {
+			method: 'get',
+			url: 'https://api.spotify.com/v1/me/player/recently-played',
+			headers: { 
+				'Authorization': [token_type, access_token].join(' '),
+			},
+			json: true
+		};
+		const recentRes = await axios(recentOptions);
+
+		res.send({
+			user: userRes.data,
+			artists: artistRes.data,
+			tracks: trackRes.data,
+			current: currentRes.data,
+			recent: recentRes.data
+		});
+
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Something went wrong :('
+		});
+	}
 	
 
 });
