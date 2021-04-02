@@ -14,6 +14,7 @@
 .albumBox {
 	width: 100px;
 	height: 100px;
+	flex-shrink: 0;
 	background-color: gray;
 }
 

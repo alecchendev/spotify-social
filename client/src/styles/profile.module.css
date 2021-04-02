@@ -61,4 +61,12 @@
 		margin-top: 20px;
 		text-align: center;
 	}
+
+	.top {
+		flex-direction: column;
+	}
+
+	.topSection {
+		width: 100%;
+	}
 }
