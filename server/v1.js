@@ -1,5 +1,6 @@
 require('dotenv').config({ path: require('find-config')('.env') });
 const { generateRandomString } = require('./utils');
+const { generateAccessToken } = require('./jwt');
 const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent } = require('./spotify');
 const querystring = require('querystring');
 const axios = require('axios');
@@ -61,7 +62,13 @@ router.get('/callback', async (req, res) => {
 		const queryRes = await client.query(query, [ id, refresh_token ]);
 		console.log('Created user: ' + id);
 
-		res.redirect(frontendUrl + '/' + id);
+		const jwtToken = generateAccessToken(id);
+
+		res.redirect(frontendUrl + '/' + id + '?' +
+			querystring.stringify({
+				jwtToken: jwtToken
+			})
+		);
 
 	} catch (err) {
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getProfileData } from '../lib/api.js';
+import { getQueryParams } from '../lib/utils.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -12,6 +13,7 @@ export default function Profile() {
 	const [ profileData, setProfileData ] = React.useState({});
 
 	const { id } = useParams();
+	const { jwtToken } = getQueryParams();
 
 	React.useEffect(() => {
 
