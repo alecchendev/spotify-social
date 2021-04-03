@@ -95,6 +95,52 @@ router.get('/account/:id', authenticateToken, async (req, res) => {
 	});
 });
 
+router.get('/account/private/:id', async (req, res) => {
+
+	const id = req.params.id;
+	const query = `select private from users where user_id = $1;`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Got private mode for user: ' + id);
+		if (queryRes.rows.length === 0) {
+			res.send({
+				message: 'No user with this id.'
+			});
+		}
+		res.send({
+			private: queryRes.rows[0].private
+		});
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t get private for some reason.'
+		})
+	}
+
+})
+
+router.put('/account/private/:id', authenticateToken, async (req, res) => {
+
+	const id = req.params.id;
+	const query = `update users set private = not private where user_id = $1;`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Updated private mode for user: ' + id);
+		res.send({
+			message: 'Update worked!'
+		});
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t update for some reason.'
+		})
+	}
+
+
+});
+
 router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 
 	const id = req.params.id;

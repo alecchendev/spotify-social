@@ -16,6 +16,34 @@ export async function checkJWTAuth() {
 
 }
 
+export async function changePrivateMode(id) {
+	console.log('Called changePrivateMode');
+
+	const options = {
+		method: 'put',
+		url: url + '/' + API_VERSION + '/account/private/' + id,
+		withCredentials: true,
+		json: true
+	};
+
+	return await axios(options);
+
+}
+
+export async function getPrivateMode(id) {
+	console.log('Called getPrivateMode');
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/account/private/' + id,
+		json: true
+	};
+
+	return await axios(options);
+
+}
+
+
 export async function getFeedData(id) {
 	console.log('Called getFeedData');
 

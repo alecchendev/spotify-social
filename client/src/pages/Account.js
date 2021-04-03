@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { deleteUser, getFeedData } from '../lib/api.js';
+import { changePrivateMode, getPrivateMode, getFeedData } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import { Text, Button, Heading, Kicker, Toggle } from '../components';
 import axios from 'axios';
@@ -37,9 +37,10 @@ export default function Account() {
 		setTab(newTab);
 	};
 
-	const changePrivate = () => {
-		console.log('Called changePrivate.');
-
+	const updatePrivate = async (id) => {
+		await changePrivateMode(id);
+		const privateRes = await getPrivateMode(id);
+		setPrivateMode(privateRes.data.private);
 	}
 
 	return (
@@ -71,7 +72,7 @@ export default function Account() {
 						</div>
 						
 						<div className={styles.vertAlign}>
-							<Toggle checked={privateMode} handleChange={() => changePrivate()}/>
+							<Toggle checked={privateMode} handleChange={() => updatePrivate(id)}/>
 						</div>
 					</div>
 
