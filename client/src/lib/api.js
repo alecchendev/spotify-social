@@ -30,12 +30,13 @@ export async function changePrivateMode(id) {
 
 }
 
-export async function getPrivateMode(id) {
-	console.log('Called getPrivateMode');
+export async function getAccountData(id) {
+	console.log('Called getAccountData');
 
 	const options = {
 		method: 'get',
-		url: url + '/' + API_VERSION + '/account/private/' + id,
+		url: url + '/' + API_VERSION + '/account/' + id,
+		withCredentials: true,
 		json: true
 	};
 
@@ -43,14 +44,12 @@ export async function getPrivateMode(id) {
 
 }
 
-
-export async function getFeedData(id) {
-	console.log('Called getFeedData');
+export async function getPrivateMode(id) {
+	console.log('Called getPrivateMode');
 
 	const options = {
 		method: 'get',
-		url: url + '/' + API_VERSION + '/account/' + id,
-		withCredentials: true,
+		url: url + '/' + API_VERSION + '/account/private/' + id,
 		json: true
 	};
 

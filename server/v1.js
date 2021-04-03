@@ -89,10 +89,32 @@ router.get('/callback', async (req, res) => {
 // Account
 router.get('/account/:id', authenticateToken, async (req, res) => {
 	console.log('Called /account/:id endpoint');
-	res.send({
-		message: 'Token authenticate worked!',
-		data: req.data
-	});
+
+
+	const id = req.data.id; // cookie
+	if (id !== req.params.id) { // if they have auth token for different id
+		res.sendStatus(403);
+	} else {
+		const query = `select * from users where user_id = $1;`;
+
+		try {
+			const queryRes = await client.query(query, [ id ]);
+			console.log(queryRes.rows);
+			if (queryRes.rows.length === 0) {
+				res.sendStatus(404); // If id doesn't exist in table
+			}
+
+			
+
+
+			res.send(queryRes.rows[0]);
+
+		} catch (err) {
+			console.log(err);
+			res.send({});
+		}
+
+	}
 });
 
 router.get('/account/private/:id', async (req, res) => {
