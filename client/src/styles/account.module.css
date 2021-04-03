@@ -1,0 +1,53 @@
+
+.headingBox {
+	display: flex;
+	width: 100%;
+	justify-content: space-between;
+}
+
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.heading {
+	text-transform: capitalize;
+}
+
+.tabBox {
+	display: flex;
+	width: 35%;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.tabButton {
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 0.9em;
+	font-family: DM Sans;
+	font-weight: 700;
+	/* border: 2px solid white; */
+	border: none;
+	border-radius: 9999px;
+	padding: 0.75em 2em 0.75em;
+	transition: 0.25s;
+	outline: none;
+}
+
+.tabButton:hover {
+	cursor: pointer;
+	background-color: white;
+	color: black;
+}
+
+.tabButtonTrue {
+	background-color: white;
+	color: black
+}
+
+.tabButtonFalse {
+	background-color: black;
+	color: white;
+}
