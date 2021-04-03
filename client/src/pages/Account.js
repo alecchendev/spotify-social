@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getQueryParams } from '../lib/utils.js';
 import { getFeedData } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
@@ -11,14 +10,13 @@ export default function Account() {
 	const [ feedData, setFeedData ] = React.useState({});
 
 	const { id } = useParams();
-	const { jwtToken } = getQueryParams();
 
 	React.useEffect(() => {
 
-		const callApi = async (id, jwtToken) => {
+		const callApi = async (id) => {
 
 			try {
-				const feedRes = await getFeedData(id, jwtToken);
+				const feedRes = await getFeedData(id);
 				setFeedData(feedRes.data);
 			} catch (err) {
 				console.log(err);
@@ -26,7 +24,7 @@ export default function Account() {
 
 		};
 
-		callApi(id, jwtToken);
+		callApi(id);
 
 	}, []);
 
@@ -38,8 +36,6 @@ export default function Account() {
 			{JSON.stringify(feedData)}
 			<br/>
 			{id}
-			<br/>
-			{jwtToken}
 			<br/>
 			<Link to={'/' + id}><Button>View Profile</Button></Link>
 		</div>

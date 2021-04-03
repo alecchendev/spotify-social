@@ -4,13 +4,13 @@ import querystring from 'querystring';
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATER
 
-export async function getFeedData(id, jwtToken) {
+export async function getFeedData(id) {
 	console.log('Called getFeedData');
 
 	const options = {
 		method: 'get',
 		url: url + '/' + API_VERSION + '/account/' + id,
-		headers: { 'Authorization': 'Bearer ' + jwtToken },
+		withCredentials: true,
 		json: true
 	};
 

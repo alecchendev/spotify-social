@@ -67,11 +67,13 @@ router.get('/callback', async (req, res) => {
 
 		const jwtToken = generateAccessToken({ id: id });
 
-		res.redirect(frontendUrl + '/account/' + id + '?' +
-			querystring.stringify({
-				jwtToken: jwtToken
-			})
-		);
+		// Set httponly cookie
+		res.cookie('jwtToken', jwtToken, {
+			expires: new Date(Date.now() + (1000 * 60 * 30)),
+			httpOnly: true
+		});
+
+		res.redirect(frontendUrl + '/account/' + id);
 
 	} catch (err) {
 

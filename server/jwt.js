@@ -7,8 +7,7 @@ function generateAccessToken(id) {
 
 function authenticateToken(req, res, next) {
   console.log('Called authenticateToken');
-  const authHeader = req.headers['authorization'];
-  const token = authHeader && authHeader.split(' ')[1];
+  const token = req.cookies.jwtToken || null;
 
   if (token == null) return res.sendStatus(401);
 
