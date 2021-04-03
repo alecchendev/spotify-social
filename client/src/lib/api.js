@@ -26,8 +26,6 @@ export async function getFeedData(id) {
 		json: true
 	};
 
-	console.log(options);
-
 	return await axios(options);
 
 }

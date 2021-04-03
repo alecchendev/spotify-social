@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getFeedData } from '../lib/api.js';
+import { deleteUser, getFeedData } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import { Text, Button, Heading, Kicker, Toggle } from '../components';
+import axios from 'axios';
+
+const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const API_VERSION = 'v1'; // TEMPORARY FIX LATE
 
 export default function Account() {
 
@@ -27,8 +31,6 @@ export default function Account() {
 
 		callApi(id);
 
-		// get and set private
-
 	}, []);
 
 	const switchTab = (newTab) => {
@@ -39,11 +41,6 @@ export default function Account() {
 		console.log('Called changePrivate.');
 
 	}
-
-	const deleteAccount = (id) => {
-		console.log('Called deleteAccount.');
-	}
-
 
 	return (
 		<div>
@@ -87,7 +84,7 @@ export default function Account() {
 						</div>
 						
 						<div className={styles.vertAlign}>
-							<button className={styles.deleteButton} onClick={() => deleteAccount(id)}> Delete Account</button>
+							<a href={url + '/' + API_VERSION + '/account/delete/' + id}><button className={styles.deleteButton} >Delete Account</button></a>
 						</div>
 					</div>
 

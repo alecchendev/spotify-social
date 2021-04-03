@@ -95,6 +95,23 @@ router.get('/account/:id', authenticateToken, async (req, res) => {
 	});
 });
 
+router.get('/account/delete/:id', authenticateToken, async (req, res) => {
+
+	const id = req.params.id;
+	const query = `delete from users where user_id = $1`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Delete user: ' + id)
+		res.redirect(frontendUrl + '/?deleted=' + id);
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t delete for some reason.'
+		})
+	}
+});
+
 // JWT Auth check
 router.get('/jwtAuth', authenticateToken, (req, res) => {
 	res.sendStatus(200);
