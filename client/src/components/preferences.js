@@ -1,7 +1,7 @@
 import styles from '../styles/preferences.module.css';
 import { Text, Toggle } from '.';
 
-export default function Artist({ handleChange, url, privateMode }) {
+export default function Preferences({ handleChange, url, privateMode }) {
 	return (
 		<div>
 

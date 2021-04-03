@@ -1,9 +1,8 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAccountData, changePrivateMode, getPrivateMode, getFeedData } from '../lib/api.js';
+import { getAccountData, changePrivateMode, getPrivateMode } from '../lib/api.js';
 import styles from '../styles/account.module.css';
-import { Text, Button, Heading, Kicker, Toggle, Preferences } from '../components';
-import axios from 'axios';
+import { Text, Button, Heading, Kicker, Feed, Preferences } from '../components';
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATE
@@ -84,9 +83,7 @@ export default function Account() {
 						{
 							(tab === 'feed' && tab !== 'preferences')
 							?
-							<div>
-
-							</div>
+							<Feed feed={accountData.feed} />
 							:
 							<Preferences handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
 						}
