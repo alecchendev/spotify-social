@@ -91,9 +91,14 @@ router.get('/account/:id', authenticateToken, async (req, res) => {
 	console.log('Called /account/:id endpoint');
 	res.send({
 		message: 'Token authenticate worked!',
-		data: req.user
+		data: req.data
 	});
 });
+
+// JWT Auth check
+router.get('/jwtAuth', authenticateToken, (req, res) => {
+	res.sendStatus(200);
+})
 
 
 // Profile data

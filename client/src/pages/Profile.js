@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getProfileData } from '../lib/api.js';
+import { checkJWTAuth, getProfileData } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -10,6 +10,7 @@ import { Track, Artist, Text } from '../components';
 export default function Profile() {
 
 	const [ profileData, setProfileData ] = React.useState({});
+	const [ auth, setAuth ] = React.useState(false);
 
 	const { id } = useParams();
 
@@ -28,11 +29,26 @@ export default function Profile() {
 
 		callApi(id);
 
+		const checkAuth = async () => {
+
+			try {
+				const authRes = await checkJWTAuth();
+				setAuth(true);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		checkAuth();
+
 	}, []);
 
 
 	return (
 		<div>
+			{
+				
+			}
 			{
 				(profileData
 				&& Object.keys(profileData).length !== 0)
@@ -105,8 +121,14 @@ export default function Profile() {
 					Loading...
 				</div>
 			}
-			<br/>
-			<Link to='/'><Button>Home</Button></Link>
+
+			<div className={styles.buttonBox}>
+				<Link to='/'><Button>Home</Button></Link>
+				{
+					auth &&
+					<Link to={'/account/' + id}><Button>Account</Button></Link>
+				}
+			</div>
 		</div>
 	)
 }
