@@ -64,7 +64,7 @@ router.get('/callback', async (req, res) => {
 
 		const jwtToken = generateAccessToken(id);
 
-		res.redirect(frontendUrl + '/' + id + '?' +
+		res.redirect(frontendUrl + '/account/' + id + '?' +
 			querystring.stringify({
 				jwtToken: jwtToken
 			})
