@@ -1,5 +1,6 @@
 require('dotenv').config({ path: require('find-config')('.env') });
 const { generateRandomString } = require('./utils');
+const { generateAccessToken, authenticateToken } = require('./jwt');
 const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent } = require('./spotify');
 const querystring = require('querystring');
 const axios = require('axios');
@@ -16,6 +17,7 @@ const client = new Client({
 });
 client.connect();
 
+// Constants
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
 const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
@@ -27,7 +29,7 @@ const scope = [
 	'user-read-recently-played'
 ].join(' ');
 
-
+// Login redirect
 router.get('/login', (req, res) => {
 
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -41,6 +43,8 @@ router.get('/login', (req, res) => {
 
 });
 
+
+// Login/auth callback
 router.get('/callback', async (req, res) => {
 
 	const code = req.query.code;
@@ -61,7 +65,15 @@ router.get('/callback', async (req, res) => {
 		const queryRes = await client.query(query, [ id, refresh_token ]);
 		console.log('Created user: ' + id);
 
-		res.redirect(frontendUrl + '/' + id);
+		const jwtToken = generateAccessToken({ id: id });
+
+		// Set httponly cookie
+		res.cookie('jwtToken', jwtToken, {
+			expires: new Date(Date.now() + (1000 * 60 * 30)),
+			httpOnly: true
+		});
+
+		res.redirect(frontendUrl + '/account/' + id);
 
 	} catch (err) {
 
@@ -74,6 +86,17 @@ router.get('/callback', async (req, res) => {
 
 });
 
+// Account
+router.get('/account/:id', authenticateToken, async (req, res) => {
+	console.log('Called /account/:id endpoint');
+	res.send({
+		message: 'Token authenticate worked!',
+		data: req.user
+	});
+});
+
+
+// Profile data
 router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
