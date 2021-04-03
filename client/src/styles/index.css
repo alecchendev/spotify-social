@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap');
 
+:root {
+  --green: #1DB954;
+  --lt-green: #1fd15e;
+  --red: #e62c2c;
+  --lt-red: #fc4747;
+}
+
 body {
   margin: 0;
   background-color: black;

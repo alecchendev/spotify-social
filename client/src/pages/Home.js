@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { getQueryParams } from '../lib/utils.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import TextInput from '../components/textInput.js';
@@ -17,6 +18,8 @@ export default function Home() {
 		setSearch(event.target.value);
 	}
 
+	const { deleted } = getQueryParams();
+
 	return (
 		<div>
 			<Heading>Spotify Social</Heading>
@@ -29,6 +32,15 @@ export default function Home() {
 				<div className={styles.vertAlign}>
 					<a href={url + '/' + API_VERSION + '/login'}><Button>Login</Button></a>
 				</div>
+			</div>
+			<div className={styles.content}>
+				{
+					deleted
+					&&
+					<div>
+						<Text>{'Deleted user: ' + deleted}</Text>
+					</div>
+				}
 			</div>
 		</div>
 	)

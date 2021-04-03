@@ -16,6 +16,10 @@
 	justify-content: center;
 }
 
+.content {
+	margin-top: 25px;
+}
+
 @media screen and (max-width: 50rem) {
 
 	a, button {

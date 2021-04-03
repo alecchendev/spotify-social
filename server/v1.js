@@ -89,11 +89,101 @@ router.get('/callback', async (req, res) => {
 // Account
 router.get('/account/:id', authenticateToken, async (req, res) => {
 	console.log('Called /account/:id endpoint');
-	res.send({
-		message: 'Token authenticate worked!',
-		data: req.user
-	});
+
+
+	const id = req.data.id; // cookie
+	if (id !== req.params.id) { // if they have auth token for different id
+		res.sendStatus(403);
+	} else {
+		const query = `select * from users where user_id = $1;`;
+
+		try {
+			const queryRes = await client.query(query, [ id ]);
+			console.log(queryRes.rows);
+			if (queryRes.rows.length === 0) {
+				res.sendStatus(404); // If id doesn't exist in table
+			}
+
+			
+
+
+			res.send(queryRes.rows[0]);
+
+		} catch (err) {
+			console.log(err);
+			res.send({});
+		}
+
+	}
 });
+
+router.get('/account/private/:id', async (req, res) => {
+
+	const id = req.params.id;
+	const query = `select private from users where user_id = $1;`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Got private mode for user: ' + id);
+		if (queryRes.rows.length === 0) {
+			res.send({
+				message: 'No user with this id.'
+			});
+		}
+		res.send({
+			private: queryRes.rows[0].private
+		});
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t get private for some reason.'
+		})
+	}
+
+})
+
+router.put('/account/private/:id', authenticateToken, async (req, res) => {
+
+	const id = req.params.id;
+	const query = `update users set private = not private where user_id = $1;`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Updated private mode for user: ' + id);
+		res.send({
+			message: 'Update worked!'
+		});
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t update for some reason.'
+		})
+	}
+
+
+});
+
+router.get('/account/delete/:id', authenticateToken, async (req, res) => {
+
+	const id = req.params.id;
+	const query = `delete from users where user_id = $1`;
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+		console.log('Delete user: ' + id)
+		res.redirect(frontendUrl + '/?deleted=' + id);
+	} catch (err) {
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t delete for some reason.'
+		})
+	}
+});
+
+// JWT Auth check
+router.get('/jwtAuth', authenticateToken, (req, res) => {
+	res.sendStatus(200);
+})
 
 
 // Profile data

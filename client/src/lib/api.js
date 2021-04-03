@@ -4,8 +4,34 @@ import querystring from 'querystring';
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATER
 
-export async function getFeedData(id) {
-	console.log('Called getFeedData');
+export async function checkJWTAuth() {
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/jwtAuth',
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+
+}
+
+export async function changePrivateMode(id) {
+	console.log('Called changePrivateMode');
+
+	const options = {
+		method: 'put',
+		url: url + '/' + API_VERSION + '/account/private/' + id,
+		withCredentials: true,
+		json: true
+	};
+
+	return await axios(options);
+
+}
+
+export async function getAccountData(id) {
+	console.log('Called getAccountData');
 
 	const options = {
 		method: 'get',
@@ -14,7 +40,18 @@ export async function getFeedData(id) {
 		json: true
 	};
 
-	console.log(options);
+	return await axios(options);
+
+}
+
+export async function getPrivateMode(id) {
+	console.log('Called getPrivateMode');
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/account/private/' + id,
+		json: true
+	};
 
 	return await axios(options);
 
