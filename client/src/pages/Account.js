@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getAccountData, changePrivateMode, getPrivateMode, getFeedData } from '../lib/api.js';
 import styles from '../styles/account.module.css';
-import { Text, Button, Heading, Kicker, Toggle } from '../components';
+import { Text, Button, Heading, Kicker, Toggle, Preferences } from '../components';
 import axios from 'axios';
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
@@ -88,32 +88,7 @@ export default function Account() {
 
 							</div>
 							:
-							<div>
-								<div className={styles.settingBox}>
-									<div className={styles.settingText}>
-										<Text className={styles.settingHead}>Private Mode</Text>
-										<Text>Toggle this on to make your profile only visible to you.</Text>
-									</div>
-									
-									<div className={styles.vertAlign}>
-										<Toggle checked={privateMode} handleChange={() => updatePrivate(id)}/>
-									</div>
-								</div>
-
-								<div className={styles.settingBox}>
-									<div className={styles.settingText}>
-										<Text className={styles.settingHead}>Delete Account</Text>
-										<Text>
-											Click this button to revoke this app's permissions on your Spotify account.
-										</Text>
-									</div>
-									
-									<div className={styles.vertAlign}>
-										<a href={url + '/' + API_VERSION + '/account/delete/' + id}><button className={styles.deleteButton} >Delete Account</button></a>
-									</div>
-								</div>
-
-							</div>
+							<Preferences handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
 						}
 						</div>
 					</>

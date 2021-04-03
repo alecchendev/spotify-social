@@ -6,3 +6,4 @@ export { default as Button } from './button.js';
 export { default as Kicker } from './kicker.js';
 export { default as Heading } from './heading.js';
 export { default as Toggle } from './toggle.js';
+export { default as Preferences } from './preferences.js';
