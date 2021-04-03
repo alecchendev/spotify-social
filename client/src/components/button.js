@@ -2,7 +2,7 @@ import styled from 'styled-components';
 
 const Button = styled.button`
 	color: white;
-	background-color: #1DB954;
+	background-color: var(--green);
 	text-transform: uppercase;
 	letter-spacing: 2px;
 	font-size: 0.9em;
@@ -15,7 +15,7 @@ const Button = styled.button`
 	outline: none;
 
 	:hover {
-		background-color: #1fd15e;
+		background-color: var(--lt-green);
 		cursor: pointer;
 	}
 

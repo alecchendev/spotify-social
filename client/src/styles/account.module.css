@@ -17,8 +17,6 @@
 
 .tabBox {
 	display: flex;
-	width: 35%;
-	justify-content: space-between;
 	margin-top: 20px;
 }
 
@@ -50,4 +48,53 @@
 .tabButtonFalse {
 	background-color: black;
 	color: white;
+}
+
+.sectionBox {
+	margin-top: 50px;
+}
+
+.settingBox {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 25px;
+}
+
+.settingText {
+	width: 70%;
+	padding-right: 15px;
+}
+
+.settingHead {
+	font-weight: 700;
+}
+
+.deleteButton {
+	text-transform: uppercase;
+	letter-spacing: 2px;
+	font-size: 0.9em;
+	font-family: DM Sans;
+	font-weight: 700;
+	/* border: 2px solid white; */
+	border: none;
+	border-radius: 9999px;
+	padding: 0.75em 2em 0.75em;
+	transition: 0.25s;
+	outline: none;
+
+	background-color: var(--red);
+	color: white;
+}
+
+.deleteButton:hover {
+	background-color: var(--lt-red);
+	cursor: pointer
+}
+
+@media screen and (max-width: 50rem) {
+
+	.headingBox {
+		flex-direction: column;
+	}
+
 }
