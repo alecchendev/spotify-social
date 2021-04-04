@@ -193,9 +193,10 @@ router.get('/jwtAuth', authenticateToken, (req, res) => {
 	});
 })
 
-// Get other user profile
+// Get other user profile for feed
 router.get('/other/:id', async (req, res) => {
 
+	const myId = req.query.myId;
 	const id = req.params.id;
 
 	const query = `select refresh_token, private from users where user_id = $1`
@@ -209,23 +210,34 @@ router.get('/other/:id', async (req, res) => {
 			});
 		}
 
-		const refreshToken = queryRes.rows[0].refresh_token;
+		const { private, refresh_token } = queryRes.rows[0];
 
-		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
-		const { access_token, token_type } = accessRes.data;
+		if (private === true && myId !== id) {
+			res.send({
+				private: true
+			});
+		} else {
 
-		const userRes = await getOtherUser(token_type, access_token, id);
-		const currentRes = await getCurrent(token_type, access_token);
-		const recentRes = await getRecent(token_type, access_token);	
+			const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refresh_token);
+			const { access_token, token_type } = accessRes.data;
 
-		// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
-		// const { access_token, token_type } = accessRes.data;
+			const userRes = await getOtherUser(token_type, access_token, id);
+			const currentRes = await getCurrent(token_type, access_token);
+			const recentRes = await getRecent(token_type, access_token);	
 
-		res.send({
-			user: userRes.data,
-			current: currentRes.data,
-			recent: recentRes.data
+			// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
+			// const { access_token, token_type } = accessRes.data;
+
+			res.send({
+				private: false,
+				user: userRes.data,
+				current: currentRes.data,
+				recent: recentRes.data
 		});
+
+		}
+
+		
 
 	} catch (err) {
 		console.log(err);
