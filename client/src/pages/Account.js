@@ -31,14 +31,16 @@ export default function Account() {
 
 				const followingRes = await getFollowing(); // returns array
 				const followingData = [];
-				for (const id of followingRes.data.following) {
-					const userRes = await getOtherUser(id);
-					const userData = {
-						...userRes.data.user,
-						current: userRes.data.current,
-						recent: userRes.data.recent
-					};
-					followingData.push(userData);
+				for (const otherId of followingRes.data.following) {
+					const userRes = await getOtherUser(otherId, id);
+					if (userRes.data.private === false) {
+						const userData = {
+							...userRes.data.user,
+							current: userRes.data.current,
+							recent: userRes.data.recent
+						};
+						followingData.push(userData);
+					}
 				}
 				setFollowing(followingData);
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { checkJWTAuth, getProfileData, getIsFollowing, followUser, unfollowUser } from '../lib/api.js';
+import { checkJWTAuth, getProfileData, getIsFollowing, followUser, unfollowUser, getPrivateMode } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -10,8 +10,10 @@ import { Track, Artist, Text } from '../components';
 
 export default function Profile() {
 
-	const [ profileData, setProfileData ] = React.useState({});
+	const [ privateMode, setPrivateMode ] = React.useState(true);
+	const [ profileData, setProfileData ] = React.useState('');
 	const [ auth, setAuth ] = React.useState(false);
+	const [ me, setMe ] = React.useState(false);
 	const [ following, setFollowing ] = React.useState(false);
 
 	const { id } = useParams();
@@ -28,13 +30,31 @@ export default function Profile() {
 
 	React.useEffect(() => {
 
+		const checkPrivateMode = async (id) => {
+			try {
+				const privateRes = await getPrivateMode(id);
+				if (privateRes.status === 200) {
+					setPrivateMode(privateRes.data.private);
+				}
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		checkPrivateMode(id);
+
 		const callApi = async (id) => {
 			
 			try {
 				const profileRes = await getProfileData(id);
-				setProfileData(profileRes.data);
+				if (profileRes.status === 200) {
+					setProfileData(profileRes.data);
+				} else {
+					setProfileData({});
+				}
 			} catch (err) {
 				console.log(err);
+				setProfileData({});
 			}
 
 		}
@@ -46,15 +66,13 @@ export default function Profile() {
 			try {
 				const authRes = await checkJWTAuth();
 				setAuth(true);
+				setMe(authRes.data.id === id);
 			} catch (err) {
 				console.log(err);
 			}
 		}
 
 		checkAuth();
-
-		
-
 		checkIsFollowing(id);
 
 	}, []);
@@ -73,10 +91,7 @@ export default function Profile() {
 	return (
 		<div className={styles.wrapper}>
 			{
-				
-			}
-			{
-				(profileData
+				(profileData !== ''
 				&& Object.keys(profileData).length !== 0)
 				?
 				<div>
@@ -105,50 +120,70 @@ export default function Profile() {
 
 					</div>
 
-					<div className={styles.current}>
-						{
-							profileData.current !== ''
-							?
-							<Kicker>Currently Playing</Kicker>
-							:
-							<Kicker>Last Played</Kicker>
-						}
-						<div className={styles.currentContent}>
-							{
-								profileData.current !== ''
-								?
-								<Track item={profileData.current.item} />
-								:
-								<Track item={profileData.recent.items[0].track}/>
-							}
+					{
+						(privateMode === false || me === true)
+						?
+						<div>
+							<div className={styles.current}>
+								{
+									profileData.current !== ''
+									?
+									<Kicker>Currently Playing</Kicker>
+									:
+									<Kicker>Last Played</Kicker>
+								}
+								<div className={styles.currentContent}>
+									{
+										profileData.current !== ''
+										?
+										<Track item={profileData.current.item} />
+										:
+										<Track item={profileData.recent.items[0].track}/>
+									}
+								</div>
+							</div>
+
+							<div className={styles.top}>
+
+								<div className={styles.topSection}>
+									<Kicker>Top Tracks</Kicker>
+									{profileData.tracks.items.map(track => {
+										return (
+											<div className={styles.item}>
+												<Track item={track}/>
+											</div>
+										);
+									})}
+								</div>
+
+								<div className={styles.topSection}>
+									<Kicker>Top Artists</Kicker>
+									{profileData.artists.items.map(artist => {
+										return (
+											<div className={styles.item}>
+											<Artist item={artist}/>
+											</div>
+											);
+										})}
+								</div>
+
+							</div>
 						</div>
-					</div>
-
-					<div className={styles.top}>
-
-						<div className={styles.topSection}>
-							<Kicker>Top Tracks</Kicker>
-							{profileData.tracks.items.map(track => {
-								return (
-									<div className={styles.item}>
-										<Track item={track}/>
-									</div>
-								);
-							})}
+						:
+						<div>
+							<br/>
+							This account is private.
+							<br/>
 						</div>
-
-						<div className={styles.topSection}>
-							<Kicker>Top Artists</Kicker>
-							{profileData.artists.items.map(artist => {
-								return (
-									<div className={styles.item}>
-									<Artist item={artist}/>
-									</div>
-									);
-								})}
-						</div>
-
-					</div>
+					}
+					
+				</div>
+				:
+				(profileData !== '')
+				?
+				<div>
+					<Heading className={styles.heading}>User Not Found.</Heading>
+					<Text>The username "{id}" either does not exist in our database or is not a valid user on Spotify.</Text>
 				</div>
 				:
 				<div>
@@ -159,7 +194,7 @@ export default function Profile() {
 			<div className={styles.buttonBox}>
 				<Link to='/'><Button className={utilStyles.btnGreen}>Home</Button></Link>
 				{
-					auth &&
+					auth && me &&
 					<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>Account</Button></Link>
 				}
 			</div>

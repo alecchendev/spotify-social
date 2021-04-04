@@ -130,9 +130,7 @@ router.get('/account/private/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 		console.log('Got private mode for user: ' + id);
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'No user with this id.'
-			});
+			res.sendStatus(400);
 		}
 		res.send({
 			private: queryRes.rows[0].private
@@ -188,12 +186,15 @@ router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 
 // JWT Auth check
 router.get('/jwtAuth', authenticateToken, (req, res) => {
-	res.sendStatus(200);
+	res.send({
+		...req.data
+	});
 })
 
-// Get other user profile
+// Get other user profile for feed
 router.get('/other/:id', async (req, res) => {
 
+	const myId = req.query.myId;
 	const id = req.params.id;
 
 	const query = `select refresh_token, private from users where user_id = $1`
@@ -202,28 +203,37 @@ router.get('/other/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'Couldn\'t get refresh token.'
-			});
+			res.sendStatus(400);
 		}
 
-		const refreshToken = queryRes.rows[0].refresh_token;
+		const { private, refresh_token } = queryRes.rows[0];
 
-		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
-		const { access_token, token_type } = accessRes.data;
+		if (private === true && myId !== id) {
+			res.send({
+				private: true
+			});
+		} else {
 
-		const userRes = await getOtherUser(token_type, access_token, id);
-		const currentRes = await getCurrent(token_type, access_token);
-		const recentRes = await getRecent(token_type, access_token);	
+			const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refresh_token);
+			const { access_token, token_type } = accessRes.data;
 
-		// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
-		// const { access_token, token_type } = accessRes.data;
+			const userRes = await getOtherUser(token_type, access_token, id);
+			const currentRes = await getCurrent(token_type, access_token);
+			const recentRes = await getRecent(token_type, access_token);	
 
-		res.send({
-			user: userRes.data,
-			current: currentRes.data,
-			recent: recentRes.data
+			// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
+			// const { access_token, token_type } = accessRes.data;
+
+			res.send({
+				private: false,
+				user: userRes.data,
+				current: currentRes.data,
+				recent: recentRes.data
 		});
+
+		}
+
+		
 
 	} catch (err) {
 		console.log(err);
@@ -240,9 +250,7 @@ router.get('/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'Couldn\'t get refresh token.'
-			});
+			res.sendStatus(400);
 		}
 
 		const refreshToken = queryRes.rows[0].refresh_token;

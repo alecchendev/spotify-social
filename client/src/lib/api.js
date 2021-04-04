@@ -28,11 +28,14 @@ export async function getFollowing() {
 
 }
 
-export async function getOtherUser(id) {
+export async function getOtherUser(id, myId) {
 
 	const options = {
 		method: 'get',
-		url: url + '/' + API_VERSION + '/other/' + id,
+		data: {
+			myId: myId
+		},
+		url: url + '/' + API_VERSION + '/other/' + id + '?myId=' + myId,
 		json: true
 	}
 	return await axios(options);
