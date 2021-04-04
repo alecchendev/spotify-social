@@ -130,9 +130,7 @@ router.get('/account/private/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 		console.log('Got private mode for user: ' + id);
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'No user with this id.'
-			});
+			res.sendStatus(400);
 		}
 		res.send({
 			private: queryRes.rows[0].private
@@ -205,9 +203,7 @@ router.get('/other/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'Couldn\'t get refresh token.'
-			});
+			res.sendStatus(400);
 		}
 
 		const { private, refresh_token } = queryRes.rows[0];
@@ -254,9 +250,7 @@ router.get('/:id', async (req, res) => {
 		const queryRes = await client.query(query, [ id ]);
 
 		if (queryRes.rows.length === 0) {
-			res.send({
-				message: 'Couldn\'t get refresh token.'
-			});
+			res.sendStatus(400);
 		}
 
 		const refreshToken = queryRes.rows[0].refresh_token;

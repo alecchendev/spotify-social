@@ -33,7 +33,9 @@ export default function Profile() {
 		const checkPrivateMode = async (id) => {
 			try {
 				const privateRes = await getPrivateMode(id);
-				setPrivateMode(privateRes.data.private);
+				if (privateRes.status === 200) {
+					setPrivateMode(privateRes.data.private);
+				}
 			} catch (err) {
 				console.log(err);
 			}
@@ -45,7 +47,11 @@ export default function Profile() {
 			
 			try {
 				const profileRes = await getProfileData(id);
-				setProfileData(profileRes.data);
+				if (profileRes.status === 200) {
+					setProfileData(profileRes.data);
+				} else {
+					setProfileData({});
+				}
 			} catch (err) {
 				console.log(err);
 				setProfileData({});
@@ -84,9 +90,6 @@ export default function Profile() {
 
 	return (
 		<div className={styles.wrapper}>
-			{
-				
-			}
 			{
 				(profileData !== ''
 				&& Object.keys(profileData).length !== 0)
