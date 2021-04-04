@@ -35,3 +35,9 @@
 	background-color: var(--lt-red);
 	cursor: pointer
 }
+
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
