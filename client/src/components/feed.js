@@ -6,7 +6,13 @@ export default function Feed({ feed }) {
 		<div>
 
 			{
-				!(feed && feed.length !== 0)
+				(feed === '')
+				?
+				<Text>
+					Loading...
+				</Text>
+				:
+				(feed !== '' && feed.length === 0)
 				?
 				<Text>
 					You don't currently follow anyone.

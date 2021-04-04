@@ -12,7 +12,7 @@ export default function Account() {
 
 	const [ accountData, setAccountData ] = React.useState({});
 
-	const [ following, setFollowing ] = React.useState([]);
+	const [ following, setFollowing ] = React.useState(''); // Pre fetched state
 	const [ tab, setTab ] = React.useState('feed'); // feed, preferences
 	const [ privateMode, setPrivateMode ] = React.useState(false);
 
