@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { checkJWTAuth, getProfileData, getIsFollowing, followUser } from '../lib/api.js';
+import { checkJWTAuth, getProfileData, getIsFollowing, followUser, unfollowUser } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -61,7 +61,12 @@ export default function Profile() {
 
 	const handleFollow = async () => {
 		await followUser(id);
-		checkIsFollowing(id);
+		await checkIsFollowing(id);
+	}
+
+	const handleUnfollow = async () => {
+		await unfollowUser(id);
+		await checkIsFollowing(id);
 	}
 
 
@@ -93,7 +98,7 @@ export default function Profile() {
 									?
 									<Button className={styles.followButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
 									:
-									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined}>Following</Button>
+									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
 								)
 							}
 						</div>

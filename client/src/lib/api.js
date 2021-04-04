@@ -16,6 +16,18 @@ export async function checkJWTAuth() {
 
 }
 
+export async function unfollowUser(id) {
+
+	const options = {
+		method: 'delete',
+		url: url + '/' + API_VERSION + '/follow/' + id,
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+
+}
+
 export async function followUser(id) {
 
 	const options = {

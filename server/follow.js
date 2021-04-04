@@ -99,6 +99,30 @@ router.post('/:followingId', authenticateToken, async (req, res) => {
 })
 
 // Have the user unfollow this person
+router.delete('/:followingId', authenticateToken, async (req, res) => {
 
+	const id = req.data.id; // cookie
+	const followingId = req.params.followingId;
+
+	const query = `delete from following where user_id = $1 and following_id = $2;`;
+
+	try {
+		const queryRes = await client.query(query, [ id, followingId ]);
+		console.log('No longer following user: ' + followingId);
+
+		res.send({
+			status: 200
+		});
+
+	} catch (err) {
+
+		console.log(err);
+		res.send({
+			status: 400
+		})
+
+	}
+
+})
 
 module.exports = router;
