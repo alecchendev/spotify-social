@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAccountData, changePrivateMode, getPrivateMode } from '../lib/api.js';
+import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
@@ -12,7 +12,7 @@ export default function Account() {
 
 	const [ accountData, setAccountData ] = React.useState({});
 
-	const [ feedData, setFeedData ] = React.useState({});
+	const [ following, setFollowing ] = React.useState([]);
 	const [ tab, setTab ] = React.useState('feed'); // feed, preferences
 	const [ privateMode, setPrivateMode ] = React.useState(false);
 
@@ -28,6 +28,20 @@ export default function Account() {
 					status: 200,
 					...accountRes.data
 				});
+
+				const followingRes = await getFollowing(); // returns array
+				const followingData = [];
+				for (const id of followingRes.data.following) {
+					const userRes = await getOtherUser(id);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+					followingData.push(userRes.data);
+				}
+				setFollowing(followingData);
 
 				const privateRes = await getPrivateMode(id);
 				setPrivateMode(privateRes.data.private);
@@ -84,7 +98,7 @@ export default function Account() {
 						{
 							(tab === 'feed' && tab !== 'settings')
 							?
-							<Feed feed={accountData.feed} />
+							<Feed feed={following} />
 							:
 							<Settings handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
 						}

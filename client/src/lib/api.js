@@ -16,6 +16,29 @@ export async function checkJWTAuth() {
 
 }
 
+export async function getFollowing() {
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/follow',
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+
+}
+
+export async function getOtherUser(id) {
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/other/' + id,
+		json: true
+	}
+	return await axios(options);
+
+}
+
 export async function unfollowUser(id) {
 
 	const options = {
