@@ -188,7 +188,9 @@ router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 
 // JWT Auth check
 router.get('/jwtAuth', authenticateToken, (req, res) => {
-	res.sendStatus(200);
+	res.send({
+		...req.data
+	});
 })
 
 // Get other user profile

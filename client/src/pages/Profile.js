@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { checkJWTAuth, getProfileData, getIsFollowing, followUser, unfollowUser } from '../lib/api.js';
+import { checkJWTAuth, getProfileData, getIsFollowing, followUser, unfollowUser, getPrivateMode } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -10,8 +10,10 @@ import { Track, Artist, Text } from '../components';
 
 export default function Profile() {
 
+	const [ privateMode, setPrivateMode ] = React.useState(true);
 	const [ profileData, setProfileData ] = React.useState({});
 	const [ auth, setAuth ] = React.useState(false);
+	const [ me, setMe ] = React.useState(false);
 	const [ following, setFollowing ] = React.useState(false);
 
 	const { id } = useParams();
@@ -27,6 +29,17 @@ export default function Profile() {
 	}
 
 	React.useEffect(() => {
+
+		const checkPrivateMode = async (id) => {
+			try {
+				const privateRes = await getPrivateMode(id);
+				setPrivateMode(privateRes.data.private);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		checkPrivateMode(id);
 
 		const callApi = async (id) => {
 			
@@ -46,15 +59,13 @@ export default function Profile() {
 			try {
 				const authRes = await checkJWTAuth();
 				setAuth(true);
+				setMe(authRes.data.id === id);
 			} catch (err) {
 				console.log(err);
 			}
 		}
 
 		checkAuth();
-
-		
-
 		checkIsFollowing(id);
 
 	}, []);
@@ -77,7 +88,8 @@ export default function Profile() {
 			}
 			{
 				(profileData
-				&& Object.keys(profileData).length !== 0)
+				&& Object.keys(profileData).length !== 0
+				&& (privateMode === false || me === true))
 				?
 				<div>
 					<div className={styles.header}>
@@ -149,6 +161,15 @@ export default function Profile() {
 						</div>
 
 					</div>
+				</div>
+				:
+				(profileData
+				&& Object.keys(profileData).length !== 0
+				&& privateMode === true)
+				?
+				<div>
+					This account is private.
+					<br/>
 				</div>
 				:
 				<div>
