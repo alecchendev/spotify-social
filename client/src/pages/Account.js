@@ -90,7 +90,7 @@ export default function Account() {
 							<div className={styles.headingBox}>
 								<Heading className={styles.heading}>{tab}</Heading>
 								<div className={styles.vertAlign}>
-									<Link to={'/' + id}><Button className={utilStyles.btnGreen}>View Profile</Button></Link>
+									<Link to={'/' + id}><Button className={utilStyles.btnGreen}>View Profile →</Button></Link>
 								</div>
 							</div>
 							<div className={styles.tabBox}>

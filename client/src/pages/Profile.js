@@ -8,6 +8,9 @@ import styles from '../styles/profile.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Track, Artist, Text } from '../components';
 
+const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const API_VERSION = 'v1'; // TEMPORARY FIX LATE
+
 export default function Profile() {
 
 	const [ privateMode, setPrivateMode ] = React.useState(true);
@@ -109,6 +112,15 @@ export default function Profile() {
 				&& Object.keys(profileData).length !== 0)
 				?
 				<div>
+					<div className={styles.navButtonBox}>
+						{
+							(auth && me)
+							&&
+							<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>← Account</Button></Link>
+							// :
+							// <a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
+						}
+					</div>
 					<div className={styles.header}>
 						<div className={styles.imgBox}>
 							{profileData.user.images.length > 0 &&
@@ -121,16 +133,19 @@ export default function Profile() {
 							<Heading>{profileData.user.display_name}</Heading>
 							<Text>{profileData.followerCount/*profileData.user.followers.total*/} Followers</Text>
 							<div className={styles.followCopyButtonBox}>
-							{
-								auth &&
-								(
-									following === false
-									?
-									<Button className={styles.followButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
-									:
-									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
-								)
-							}
+									{
+										auth
+										?
+										(
+											following === false
+											?
+											<Button className={styles.leftButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
+											:
+											<Button className={styles.leftButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
+										)
+										:
+										<a href={url + '/' + API_VERSION + '/login'}><Button className={styles.leftButton + ' ' + utilStyles.btnGreen}>Login</Button></a>
+									}
 								<Button className={styles.copyButton + ' ' + (copied ? utilStyles.btnBlackStatic : utilStyles.btnGreen)} onClick={() => copyLink(window.location.href)}>{copied ? 'Copied!' : 'Copy Link'}</Button>
 							</div>
 						</div>
@@ -207,14 +222,7 @@ export default function Profile() {
 					Loading...
 				</div>
 			}
-
-			<div className={styles.buttonBox}>
-				<Link to='/'><Button className={utilStyles.btnGreen}>Home</Button></Link>
-				{
-					auth && me &&
-					<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>Account</Button></Link>
-				}
-			</div>
+			
 		</div>
 	)
 }
