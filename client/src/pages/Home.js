@@ -22,7 +22,7 @@ export default function Home() {
 	const { deleted } = getQueryParams();
 
 	return (
-		<div>
+		<div className={styles.wrapper}>
 			<Heading>Spotify Social</Heading>
 			<Text className={styles.subtitle}>Search for your friends' profiles or login to activate your own.</Text>
 			<div className={styles.searchBox}>

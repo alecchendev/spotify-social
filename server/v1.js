@@ -196,13 +196,33 @@ router.get('/other/:id', async (req, res) => {
 
 	const id = req.params.id;
 
+	const query = `select refresh_token, private from users where user_id = $1`
+
 	try {
-		const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
+		const queryRes = await client.query(query, [ id ]);
+
+		if (queryRes.rows.length === 0) {
+			res.send({
+				message: 'Couldn\'t get refresh token.'
+			});
+		}
+
+		const refreshToken = queryRes.rows[0].refresh_token;
+
+		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
 		const { access_token, token_type } = accessRes.data;
 
 		const userRes = await getOtherUser(token_type, access_token, id);
+		const currentRes = await getCurrent(token_type, access_token);
+		const recentRes = await getRecent(token_type, access_token);	
+
+		// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
+		// const { access_token, token_type } = accessRes.data;
+
 		res.send({
-			...userRes.data
+			user: userRes.data,
+			current: currentRes.data,
+			recent: recentRes.data
 		});
 
 	} catch (err) {

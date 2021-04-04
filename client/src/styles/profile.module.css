@@ -1,4 +1,7 @@
 
+.wrapper {
+	padding-top: 100px;
+}
 
 .header {
 	display: flex;

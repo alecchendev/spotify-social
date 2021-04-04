@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser } from '../lib/api.js';
+import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser, getFeedUser } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
@@ -33,13 +33,12 @@ export default function Account() {
 				const followingData = [];
 				for (const id of followingRes.data.following) {
 					const userRes = await getOtherUser(id);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
-					followingData.push(userRes.data);
+					const userData = {
+						...userRes.data.user,
+						current: userRes.data.current,
+						recent: userRes.data.recent
+					};
+					followingData.push(userData);
 				}
 				setFollowing(followingData);
 
@@ -76,24 +75,28 @@ export default function Account() {
 				!(accountData &&
 				Object.keys(accountData).length !== 0)
 				?
-				<Text>Loading...</Text>
+				<Text className={styles.topBox}>Loading...</Text>
 				:
 				<>
-				<Kicker>Account</Kicker>
+				
 				{
 					accountData.status === 200
 					?
 					<>
-						<div className={styles.headingBox}>
-							<Heading className={styles.heading}>{tab}</Heading>
-							<div className={styles.vertAlign}>
-								<Link to={'/' + id}><Button className={utilStyles.btnGreen}>View Profile</Button></Link>
+						<div className={styles.topBox}>
+							<Kicker>Account</Kicker>
+							<div className={styles.headingBox}>
+								<Heading className={styles.heading}>{tab}</Heading>
+								<div className={styles.vertAlign}>
+									<Link to={'/' + id}><Button className={utilStyles.btnGreen}>View Profile</Button></Link>
+								</div>
+							</div>
+							<div className={styles.tabBox}>
+								<Button className={styles.tabButton + ' ' + (tab === 'feed' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('feed')}>Feed</Button>
+								<Button className={styles.tabButton + ' ' + (tab === 'settings' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('settings')}>Settings</Button>
 							</div>
 						</div>
-						<div className={styles.tabBox}>
-							<Button className={styles.tabButton + ' ' + (tab === 'feed' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('feed')}>Feed</Button>
-							<Button className={styles.tabButton + ' ' + (tab === 'settings' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('settings')}>Settings</Button>
-						</div>
+
 						<div className={styles.sectionBox}>
 						{
 							(tab === 'feed' && tab !== 'settings')
@@ -105,14 +108,15 @@ export default function Account() {
 						</div>
 					</>
 					:
-					<>
+					<div className={styles.topBox}>
+						<Kicker>Account</Kicker>
 						<div className={styles.headingBox}>
 							<Heading className={styles.heading}>User Not Found.</Heading>
 							<div className={styles.vertAlign}>
 								<a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
 							</div>
 						</div>	
-					</>
+					</div>
 				}
 				</>
 			}

@@ -3,6 +3,12 @@
 
 .user {
 	display: flex;
+	justify-content: space-between;
+}
+
+.userInfo {
+	width: 31%;
+	display: flex;
 }
 
 .infoBox {
@@ -22,6 +28,63 @@
 }
 
 .profileImg {
+	width: 100%;
+	height: 100%;
+}
+
+.userLink {
+	text-decoration: none;
+	color: white;
+	transition: 0.25s;
+	word-break: break-word;
+}
+
+.userLink:hover {
+	color: var(--green);
+}
+
+.nowBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 31%;
+}
+
+.nowLabel {
+	margin-bottom: 5px;
+}
+
+.recentBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	width: 31%;
+}
+
+.recentLabel {
+	margin-bottom: 10px;
+}
+
+.recentContent {
+	display: flex;
+	flex-wrap: wrap;
+}
+
+.recentItem {
+	margin-right: 5px;
+	margin-bottom: 5px;
+}
+
+.recentArtistImgBox {
+	width: 35px;
+	height: 35px;
+	border-radius: 9999px;
+	flex-shrink: 0;
+	overflow: hidden;
+	background-color: gray;
+}
+
+.recentImg {
 	width: 100%;
 	height: 100%;
 }
