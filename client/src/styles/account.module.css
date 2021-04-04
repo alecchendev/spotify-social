@@ -120,7 +120,7 @@
 	}
 
 	.vertAlign {
-		width: 55%;
+		min-width: 50%;
 		flex-direction: row;
 		justify-content: center;
 		margin: auto;
