@@ -88,3 +88,34 @@
 	width: 100%;
 	height: 100%;
 }
+
+@media screen and (max-width: 50rem) {
+
+	.user {
+		flex-wrap: wrap;
+	}
+
+	.userInfo {
+		width: 50%;
+	}
+
+	.nowBox {
+		width: 45%;
+	}
+
+	.recentBox {
+		width: 50%;
+		margin: auto;
+		margin-top: 15px;
+	}
+
+	.recentLabel {
+		margin: auto;
+		margin-bottom: 10px;
+	}
+
+	.recentContent {
+		justify-content: center;
+	}
+
+}
