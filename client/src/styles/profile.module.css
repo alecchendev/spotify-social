@@ -46,11 +46,11 @@
 
 .followButton {
 	width: 200px;
+	margin-right: 15px;
 }
 
 .copyButton {
 	width: 200px;
-	margin-left: 15px;
 }
 
 .current {
