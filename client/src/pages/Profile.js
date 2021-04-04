@@ -11,7 +11,7 @@ import { Track, Artist, Text } from '../components';
 export default function Profile() {
 
 	const [ privateMode, setPrivateMode ] = React.useState(true);
-	const [ profileData, setProfileData ] = React.useState({});
+	const [ profileData, setProfileData ] = React.useState('');
 	const [ auth, setAuth ] = React.useState(false);
 	const [ me, setMe ] = React.useState(false);
 	const [ following, setFollowing ] = React.useState(false);
@@ -48,6 +48,7 @@ export default function Profile() {
 				setProfileData(profileRes.data);
 			} catch (err) {
 				console.log(err);
+				setProfileData({});
 			}
 
 		}
@@ -87,7 +88,7 @@ export default function Profile() {
 				
 			}
 			{
-				(profileData
+				(profileData !== ''
 				&& Object.keys(profileData).length !== 0
 				&& (privateMode === false || me === true))
 				?
@@ -163,13 +164,20 @@ export default function Profile() {
 					</div>
 				</div>
 				:
-				(profileData
+				(profileData !== ''
 				&& Object.keys(profileData).length !== 0
 				&& privateMode === true)
 				?
 				<div>
 					This account is private.
 					<br/>
+				</div>
+				:
+				(profileData !== '')
+				?
+				<div>
+					<Heading className={styles.heading}>User Not Found.</Heading>
+					<Text>The username "{id}" either does not exist in our database or is not a valid user on Spotify.</Text>
 				</div>
 				:
 				<div>
