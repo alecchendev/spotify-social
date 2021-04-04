@@ -6,7 +6,7 @@
 
 .wrapper {
 	max-width: var(--desktop-width);
-	padding-top: 100px;
+	/* padding-top: 100px; */
 	margin: auto;
 }
 

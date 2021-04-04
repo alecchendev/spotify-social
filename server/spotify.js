@@ -25,6 +25,20 @@ const getAuth = async (clientId, clientSecret, grant_type, code = '', redirect_u
 
 }
 
+const getOtherUser = async (token_type, access_token, otherId) => {
+
+	const userOptions = {
+		method: 'get',
+		url: 'https://api.spotify.com/v1/users/' + otherId,
+		headers: { 
+			'Authorization': [token_type, access_token].join(' '),
+		},
+		json: true
+	};
+	return await axios(userOptions);
+
+}
+
 const getUser = async (token_type, access_token) => {
 
 	const userOptions = {
@@ -106,4 +120,4 @@ const getRecent = async (token_type, access_token) => {
 
 }
 
-module.exports = { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent };
+module.exports = { getAuth, getUser, getOtherUser, getArtists, getTracks, getCurrent, getRecent };

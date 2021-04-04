@@ -1,9 +1,10 @@
 require('dotenv').config({ path: require('find-config')('.env') });
 const { generateRandomString } = require('./utils');
 const { generateAccessToken, authenticateToken } = require('./jwt');
-const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent } = require('./spotify');
+const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent, getOtherUser } = require('./spotify');
 const querystring = require('querystring');
 const axios = require('axios');
+const followApi = require('./follow');
 const express = require('express');
 const router = express.Router();
 
@@ -28,6 +29,9 @@ const scope = [
 	'user-read-currently-playing',
 	'user-read-recently-played'
 ].join(' ');
+
+// Use endpoints for following
+router.use('/follow', followApi);
 
 // Login redirect
 router.get('/login', (req, res) => {
@@ -166,10 +170,12 @@ router.put('/account/private/:id', authenticateToken, async (req, res) => {
 router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 
 	const id = req.params.id;
-	const query = `delete from users where user_id = $1`;
+	const usersQuery = `delete from users where user_id = $1`;
+	const followingQuery = `delete from following where user_id = $1`;
 
 	try {
-		const queryRes = await client.query(query, [ id ]);
+		const usersQueryRes = await client.query(usersQuery, [ id ]);
+		const followingQueryRes = await client.query(followingQuery, [ id ]);
 		console.log('Delete user: ' + id)
 		res.redirect(frontendUrl + '/?deleted=' + id);
 	} catch (err) {
@@ -185,6 +191,46 @@ router.get('/jwtAuth', authenticateToken, (req, res) => {
 	res.sendStatus(200);
 })
 
+// Get other user profile
+router.get('/other/:id', async (req, res) => {
+
+	const id = req.params.id;
+
+	const query = `select refresh_token, private from users where user_id = $1`
+
+	try {
+		const queryRes = await client.query(query, [ id ]);
+
+		if (queryRes.rows.length === 0) {
+			res.send({
+				message: 'Couldn\'t get refresh token.'
+			});
+		}
+
+		const refreshToken = queryRes.rows[0].refresh_token;
+
+		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
+		const { access_token, token_type } = accessRes.data;
+
+		const userRes = await getOtherUser(token_type, access_token, id);
+		const currentRes = await getCurrent(token_type, access_token);
+		const recentRes = await getRecent(token_type, access_token);	
+
+		// const accessRes = await getAuth(clientId, clientSecret, 'client_credentials');
+		// const { access_token, token_type } = accessRes.data;
+
+		res.send({
+			user: userRes.data,
+			current: currentRes.data,
+			recent: recentRes.data
+		});
+
+	} catch (err) {
+		console.log(err);
+		res.sendStatus(400);
+	}
+
+})
 
 // Profile data
 router.get('/:id', async (req, res) => {
@@ -202,7 +248,7 @@ router.get('/:id', async (req, res) => {
 		const refreshToken = queryRes.rows[0].refresh_token;
 
 		const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refreshToken);
-		const { access_token, token_type } = accessRes.data;	
+		const { access_token, token_type } = accessRes.data;
 
 		// Retrieve data from Spotify API
 		const userRes = await getUser(token_type, access_token);

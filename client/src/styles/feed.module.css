@@ -1,0 +1,13 @@
+
+.userBox {
+	margin-bottom: 25px;
+}
+
+/* .userBox::before {
+	content: "";
+	display: block;
+	width: 100%;
+	height: 1px;
+	margin: 0 auto 20px;
+	background-color: gray;
+} */
