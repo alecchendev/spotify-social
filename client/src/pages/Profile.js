@@ -191,7 +191,7 @@ export default function Profile() {
 			<div className={styles.buttonBox}>
 				<Link to='/'><Button className={utilStyles.btnGreen}>Home</Button></Link>
 				{
-					auth &&
+					auth && me &&
 					<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>Account</Button></Link>
 				}
 			</div>
