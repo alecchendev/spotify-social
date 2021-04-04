@@ -11,10 +11,6 @@ const Button = styled.button`
 	transition: 0.25s;
 	outline: none;
 
-	:hover {
-		cursor: pointer;
-	}
-
 `;
 
 export default Button;

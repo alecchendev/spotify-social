@@ -8,13 +8,23 @@ import styles from '../styles/profile.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Track, Artist, Text } from '../components';
 
+const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const API_VERSION = 'v1'; // TEMPORARY FIX LATE
+
 export default function Profile() {
 
 	const [ privateMode, setPrivateMode ] = React.useState(true);
 	const [ profileData, setProfileData ] = React.useState('');
 	const [ auth, setAuth ] = React.useState(false);
 	const [ me, setMe ] = React.useState(false);
+	const [ myId, setMyId ] = React.useState('');
 	const [ following, setFollowing ] = React.useState(false);
+	const [ copied, setCopied ] = React.useState(false);
+
+	const [ timeRange, setTimeRange ] = React.useState({
+		tracks: 'short_term',
+		artists: 'medium_term'
+	});
 
 	const { id } = useParams();
 
@@ -67,6 +77,7 @@ export default function Profile() {
 				const authRes = await checkJWTAuth();
 				setAuth(true);
 				setMe(authRes.data.id === id);
+				setMyId(authRes.data.id);
 			} catch (err) {
 				console.log(err);
 			}
@@ -87,6 +98,25 @@ export default function Profile() {
 		await checkIsFollowing(id);
 	}
 
+	const copyLink = (str) => {
+		const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+		setCopied(true);
+	}
+
+	const changeTimeRange = (section, newValue) => {
+		const newTimeRange = {...timeRange};
+		newTimeRange[section] = newValue;
+		setTimeRange(newTimeRange);
+	}
+
 
 	return (
 		<div className={styles.wrapper}>
@@ -95,6 +125,13 @@ export default function Profile() {
 				&& Object.keys(profileData).length !== 0)
 				?
 				<div>
+					<div className={styles.navButtonBox}>
+						{
+							auth
+							&&
+							<Link to={'/account/' + myId}><Button className={utilStyles.btnGreen}>← Account</Button></Link>
+						}
+					</div>
 					<div className={styles.header}>
 						<div className={styles.imgBox}>
 							{profileData.user.images.length > 0 &&
@@ -105,17 +142,23 @@ export default function Profile() {
 						<div className={styles.headerBox}>
 							<Kicker>Profile</Kicker>
 							<Heading>{profileData.user.display_name}</Heading>
-							<Text>{profileData.user.followers.total} Followers</Text>
-							{
-								auth &&
-								(
-									following === false
-									?
-									<Button className={styles.followButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
-									:
-									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
-								)
-							}
+							<Text>{profileData.followerCount/*profileData.user.followers.total*/} Followers</Text>
+							<div className={styles.followCopyButtonBox}>
+									{
+										auth
+										?
+										(
+											following === false
+											?
+											<Button className={styles.leftButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
+											:
+											<Button className={styles.leftButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
+										)
+										:
+										<a href={url + '/' + API_VERSION + '/login'}><Button className={styles.leftButton + ' ' + utilStyles.btnGreen}>Login</Button></a>
+									}
+								<Button className={styles.copyButton + ' ' + (copied ? utilStyles.btnBlackStatic : utilStyles.btnGreen)} onClick={() => copyLink(window.location.href)}>{copied ? 'Copied!' : 'Copy Link'}</Button>
+							</div>
 						</div>
 
 					</div>
@@ -147,7 +190,27 @@ export default function Profile() {
 
 								<div className={styles.topSection}>
 									<Kicker>Top Tracks</Kicker>
-									{profileData.tracks.items.map(track => {
+									<div className={styles.timeFilter}>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'short_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'short_term')}
+										>
+											4 Weeks
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'medium_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'medium_term')}
+										>
+											6 Months
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'long_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'long_term')}
+										>
+											All Time
+										</Button>
+									</div>
+									{profileData.tracks[timeRange.tracks].items.map(track => {
 										return (
 											<div className={styles.item}>
 												<Track item={track}/>
@@ -158,7 +221,27 @@ export default function Profile() {
 
 								<div className={styles.topSection}>
 									<Kicker>Top Artists</Kicker>
-									{profileData.artists.items.map(artist => {
+									<div className={styles.timeFilter}>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'short_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'short_term')}
+										>
+											4 Weeks
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'medium_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'medium_term')}
+										>
+											6 Months
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'long_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'long_term')}
+										>
+											All Time
+										</Button>
+									</div>
+									{profileData.artists[timeRange.artists].items.map(artist => {
 										return (
 											<div className={styles.item}>
 											<Artist item={artist}/>
@@ -191,13 +274,6 @@ export default function Profile() {
 				</div>
 			}
 
-			<div className={styles.buttonBox}>
-				<Link to='/'><Button className={utilStyles.btnGreen}>Home</Button></Link>
-				{
-					auth && me &&
-					<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>Account</Button></Link>
-				}
-			</div>
 		</div>
 	)
 }

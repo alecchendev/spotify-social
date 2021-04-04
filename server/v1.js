@@ -246,6 +246,7 @@ router.get('/other/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
+	const followerQuery = `select count(*) from following where following_id = $1;`;
 	try {
 		const queryRes = await client.query(query, [ id ]);
 
@@ -260,17 +261,37 @@ router.get('/:id', async (req, res) => {
 
 		// Retrieve data from Spotify API
 		const userRes = await getUser(token_type, access_token);
-		const artistRes = await getArtists(token_type, access_token, 'medium_term', 20);
-		const trackRes = await getTracks(token_type, access_token, 'short_term', 20);
+
+		const shortArtistRes = await getArtists(token_type, access_token, 'short_term', 20);
+		const mediumArtistRes = await getArtists(token_type, access_token, 'medium_term', 20);
+		const longArtistRes = await getArtists(token_type, access_token, 'long_term', 20);
+
+		const shortTrackRes = await getTracks(token_type, access_token, 'short_term', 20);
+		const mediumTrackRes = await getTracks(token_type, access_token, 'medium_term', 20);
+		const longTrackRes = await getTracks(token_type, access_token, 'long_term', 20);
+
 		const currentRes = await getCurrent(token_type, access_token);
 		const recentRes = await getRecent(token_type, access_token);
 
+		// Follower count
+		const followerQueryRes = await client.query(followerQuery, [ id ]);
+		const followerCount = followerQueryRes.rows[0].count;
+
 		res.send({
 			user: userRes.data,
-			artists: artistRes.data,
-			tracks: trackRes.data,
+			artists: {
+				short_term: shortArtistRes.data,
+				medium_term: mediumArtistRes.data,
+				long_term: longArtistRes.data
+			},
+			tracks: {
+				short_term: shortTrackRes.data,
+				medium_term: mediumTrackRes.data,
+				long_term: longTrackRes.data
+			},
 			current: currentRes.data,
-			recent: recentRes.data
+			recent: recentRes.data,
+			followerCount: followerCount
 		});
 
 	} catch (err) {

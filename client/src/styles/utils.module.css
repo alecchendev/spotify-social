@@ -7,21 +7,34 @@
 
 .btnGreen:hover {
   background-color: var(--lt-green);
+	cursor: pointer;
 }
 
 .btnBlack {
 	border: none;
 	background-color: black;
 	color: white;
+	outline: none;
 }
 
 .btnBlack:hover, .btnBlackOutlined:hover {
 	background-color: white;
 	color: black;
+	cursor: pointer;
 }
 
 .btnBlackOutlined {
 	background-color: black;
 	color: white;
 	border: 2px solid white;
+}
+
+.btnBlackStatic {
+	background-color: black;
+	color: white;
+	border: 2px solid white;
+}
+
+.btnBlackStatic:hover {
+	cursor: initial;
 }

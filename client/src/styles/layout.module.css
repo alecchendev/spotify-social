@@ -1,6 +1,6 @@
 
 :root {
-	--desktop-width: 50rem;
+	--desktop-width: 53rem;
 	--mobile-width: 90%;
 }
 
@@ -10,7 +10,7 @@
 	margin: auto;
 }
 
-@media screen and (max-width: 55.6rem) {
+@media screen and (max-width: 58.9rem) {
 
 	.wrapper {
 		max-width: var(--mobile-width);

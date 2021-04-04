@@ -3,6 +3,10 @@
 	padding-top: 100px;
 }
 
+.navButtonBox {
+	margin-bottom: 25px;
+}
+
 .header {
 	display: flex;
 }
@@ -33,16 +37,17 @@
 	margin: 10px 0 10px;
 }
 
-.buttonBox {
-	width: 35%;
-	margin: 25px 0;
-	display: flex;
-	justify-content: space-between;
+.followCopyButtonBox {
+	margin-top: 20px;
 }
 
-.followButton {
+.leftButton {
 	width: 200px;
-	margin-top: 20px;
+	margin-right: 15px;
+}
+
+.copyButton {
+	width: 200px;
 }
 
 .current {
@@ -62,6 +67,22 @@
 	width: 50%;
 }
 
+.timeFilter {
+	margin-top: 5px;
+}
+
+.tabButtonTrue {
+	background-color: white;
+	color: black;
+	margin-top: 5px;
+}
+
+.tabButtonFalse {
+	background-color: black;
+	color: white;
+	margin-top: 5px;
+}
+
 .item {
 	margin-top: 15px;
 	margin-bottom: 15px;
@@ -74,6 +95,11 @@
 		margin: auto;
 	}
 
+	.navButtonBox {
+		width: 200px;
+		margin: 0 auto 25px;
+	}
+
 	.imgBox {
 		margin: auto;
 	}
@@ -84,22 +110,23 @@
 		text-align: center;
 	}
 
-	.followButton {
-		margin: 20px auto 0;
+	.followCopyButtonBox {
+		display: flex;
+		flex-direction: column;
 	}
 
-	.buttonBox {
-		width: 50%;
-		height: 100px;
-		margin: 25px auto;
-		flex-direction: column;
-		justify-content: space-between;
+	.leftButton {
+		margin: 0 auto 20px;
+	}
+
+	.copyButton {
+		margin: auto;
+	}
+
+	.current {
+		margin-top: 30px;
 	}
 	
-	.buttonBox button {
-		width: 100%;
-	}
-
 	.top {
 		flex-direction: column;
 		margin-top: 0;
@@ -107,6 +134,11 @@
 
 	.topSection {
 		width: 100%;
-		margin-top: 50px;
+		margin-top: 40px;
+	}
+
+	.timeFilter {
+		width: 50%;
+		margin: auto;
 	}
 }
