@@ -18,6 +18,12 @@
 	margin-left: 15px;
 }
 
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
 .imgBox {
 	width: 100px;
 	height: 100px;
@@ -96,17 +102,22 @@
 	}
 
 	.userInfo {
-		width: 50%;
+		width: 49%;
+	}
+
+	.imgBox {
+		width: 75px;
+		height: 75px;
 	}
 
 	.nowBox {
-		width: 45%;
+		width: 46%;
 	}
 
 	.recentBox {
-		width: 50%;
-		margin: auto;
-		margin-top: 15px;
+		width: 100%;
+		/* margin: auto; */
+		margin-top: 10px;
 	}
 
 	.recentLabel {

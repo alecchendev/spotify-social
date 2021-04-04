@@ -11,14 +11,16 @@ export default function User({ item }) {
 
 	return (<div className={styles.user}>
 		<div className={styles.userInfo}>
+			<div className={styles.vertAlign}>
+				<div className={styles.imgBox}>
+				{
+					item && item.images.length > 0 &&
+					<img className={styles.profileImg} alt='Currently playing album cover' src={item.images[0].url}/>
+				}
+				</div>
 
-			<div className={styles.imgBox}>
-			{
-				item && item.images.length > 0 &&
-				<img className={styles.profileImg} alt='Currently playing album cover' src={item.images[0].url}/>
-			}
 			</div>
-
+			
 			<div className={styles.infoBox}>
 				{
 					item
