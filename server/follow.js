@@ -19,12 +19,9 @@ const client = new Client({
 client.connect();
 
 // Get all people the user is following
-router.get('/:id', authenticateToken, async (req, res) => {
+router.get('/', authenticateToken, async (req, res) => {
 
-	const id = req.data.id; // cookie
-	if (id !== req.params.id) { // if they have auth token for different id
-		res.sendStatus(403);
-	}
+	const id = req.data.id;
 
 	const query = `select following_id from following where user_id = $1;`;
 
@@ -48,6 +45,31 @@ router.get('/:id', authenticateToken, async (req, res) => {
 })
 
 // Get if the user follows this person
+router.get('/:followingId', authenticateToken, async (req, res) => {
+
+	const id = req.data.id; // cookie
+	const followingId = req.params.followingId;
+
+	const query = `select following_id from following where user_id = $1 and following_id = $2;`;
+
+	try {
+		const queryRes = await client.query(query, [ id, followingId ]);
+		console.log('Got isFollowing for user: ' + id);
+
+		res.send({
+			isFollowing: queryRes.rows.length !== 0
+		});
+
+	} catch (err) {
+
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t get for some reason.'
+		})
+
+	}
+
+})
 
 // Have the user follow this person
 
