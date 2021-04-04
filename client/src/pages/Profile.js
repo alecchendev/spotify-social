@@ -15,6 +15,7 @@ export default function Profile() {
 	const [ auth, setAuth ] = React.useState(false);
 	const [ me, setMe ] = React.useState(false);
 	const [ following, setFollowing ] = React.useState(false);
+	const [ copied, setCopied ] = React.useState(false);
 
 	const { id } = useParams();
 
@@ -87,6 +88,19 @@ export default function Profile() {
 		await checkIsFollowing(id);
 	}
 
+	const copyLink = (str) => {
+		const el = document.createElement('textarea');
+    el.value = str;
+    el.setAttribute('readonly', '');
+    el.style.position = 'absolute';
+    el.style.left = '-9999px';
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+		setCopied(true);
+	}
+
 
 	return (
 		<div className={styles.wrapper}>
@@ -106,6 +120,7 @@ export default function Profile() {
 							<Kicker>Profile</Kicker>
 							<Heading>{profileData.user.display_name}</Heading>
 							<Text>{profileData.user.followers.total} Followers</Text>
+							<div className={styles.followCopyButtonBox}>
 							{
 								auth &&
 								(
@@ -116,6 +131,8 @@ export default function Profile() {
 									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined} onClick={handleUnfollow}>Following</Button>
 								)
 							}
+								<Button className={styles.copyButton + ' ' + (copied ? utilStyles.btnBlackStatic : utilStyles.btnGreen)} onClick={() => copyLink(window.location.href)}>{copied ? 'Copied!' : 'Copy Link'}</Button>
+							</div>
 						</div>
 
 					</div>

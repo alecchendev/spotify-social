@@ -40,9 +40,17 @@
 	justify-content: space-between;
 }
 
+.followCopyButtonBox {
+	margin-top: 20px;
+}
+
 .followButton {
 	width: 200px;
-	margin-top: 20px;
+}
+
+.copyButton {
+	width: 200px;
+	margin-left: 15px;
 }
 
 .current {
@@ -84,7 +92,16 @@
 		text-align: center;
 	}
 
+	.followCopyButtonBox {
+		display: flex;
+		flex-direction: column;
+	}
+
 	.followButton {
+		margin: auto;
+	}
+
+	.copyButton {
 		margin: 20px auto 0;
 	}
 
