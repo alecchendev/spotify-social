@@ -17,6 +17,7 @@ export default function Profile() {
 	const [ profileData, setProfileData ] = React.useState('');
 	const [ auth, setAuth ] = React.useState(false);
 	const [ me, setMe ] = React.useState(false);
+	const [ myId, setMyId ] = React.useState('');
 	const [ following, setFollowing ] = React.useState(false);
 	const [ copied, setCopied ] = React.useState(false);
 
@@ -71,6 +72,7 @@ export default function Profile() {
 				const authRes = await checkJWTAuth();
 				setAuth(true);
 				setMe(authRes.data.id === id);
+				setMyId(authRes.data.id);
 			} catch (err) {
 				console.log(err);
 			}
@@ -114,9 +116,9 @@ export default function Profile() {
 				<div>
 					<div className={styles.navButtonBox}>
 						{
-							(auth && me)
+							auth
 							&&
-							<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>← Account</Button></Link>
+							<Link to={'/account/' + myId}><Button className={utilStyles.btnGreen}>← Account</Button></Link>
 							// :
 							// <a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
 						}
@@ -222,7 +224,7 @@ export default function Profile() {
 					Loading...
 				</div>
 			}
-			
+
 		</div>
 	)
 }
