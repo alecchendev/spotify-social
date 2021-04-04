@@ -170,10 +170,12 @@ router.put('/account/private/:id', authenticateToken, async (req, res) => {
 router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 
 	const id = req.params.id;
-	const query = `delete from users where user_id = $1`;
+	const usersQuery = `delete from users where user_id = $1`;
+	const followingQuery = `delete from following where user_id = $1`;
 
 	try {
-		const queryRes = await client.query(query, [ id ]);
+		const usersQueryRes = await client.query(usersQuery, [ id ]);
+		const followingQueryRes = await client.query(followingQuery, [ id ]);
 		console.log('Delete user: ' + id)
 		res.redirect(frontendUrl + '/?deleted=' + id);
 	} catch (err) {
