@@ -16,7 +16,7 @@ export default function Artist({ item }) {
 				item
 				?
 				<div>
-					<Text>{item.name}</Text>
+					<a className={styles.artistLink} href={item.external_urls.spotify} target='_blank'><Text>{item.name}</Text></a>
 				</div>
 				:
 				<Text>Playing advertisment... refresh in a little.</Text>
