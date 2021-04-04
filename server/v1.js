@@ -246,6 +246,7 @@ router.get('/other/:id', async (req, res) => {
 router.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
+	const followerQuery = `select count(*) from following where following_id = $1;`;
 	try {
 		const queryRes = await client.query(query, [ id ]);
 
@@ -265,12 +266,17 @@ router.get('/:id', async (req, res) => {
 		const currentRes = await getCurrent(token_type, access_token);
 		const recentRes = await getRecent(token_type, access_token);
 
+		// Follower count
+		const followerQueryRes = await client.query(followerQuery, [ id ]);
+		const followerCount = followerQueryRes.rows[0].count;
+
 		res.send({
 			user: userRes.data,
 			artists: artistRes.data,
 			tracks: trackRes.data,
 			current: currentRes.data,
-			recent: recentRes.data
+			recent: recentRes.data,
+			followerCount: followerCount
 		});
 
 	} catch (err) {
