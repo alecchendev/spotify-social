@@ -4,6 +4,7 @@ const { generateAccessToken, authenticateToken } = require('./jwt');
 const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent } = require('./spotify');
 const querystring = require('querystring');
 const axios = require('axios');
+const followApi = require('./follow');
 const express = require('express');
 const router = express.Router();
 
@@ -28,6 +29,9 @@ const scope = [
 	'user-read-currently-playing',
 	'user-read-recently-played'
 ].join(' ');
+
+// Use endpoints for following
+router.use('/follow', followApi);
 
 // Login redirect
 router.get('/login', (req, res) => {

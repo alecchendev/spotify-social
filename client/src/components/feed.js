@@ -9,7 +9,7 @@ export default function Feed({ feed }) {
 				!(feed && feed.length !== 0)
 				?
 				<Text>
-					You either don't follow anyone on Spotify, or something's wrong on the backend temporarily.
+					You don't currently follow anyone.
 				</Text>
 				:
 				<div>
