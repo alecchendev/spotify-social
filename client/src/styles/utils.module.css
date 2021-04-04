@@ -1,0 +1,21 @@
+/* Button variations */
+.btnGreen {
+	border: none;
+  background-color: var(--green);
+  color: white;
+}
+
+.btnGreen:hover {
+  background-color: var(--lt-green);
+}
+
+.btnBlack {
+	border: none;
+	background-color: black;
+	color: white;
+}
+
+.btnBlack:hover {
+	background-color: white;
+	color: black;
+}

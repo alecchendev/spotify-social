@@ -2,6 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getAccountData, changePrivateMode, getPrivateMode } from '../lib/api.js';
 import styles from '../styles/account.module.css';
+import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
@@ -72,12 +73,12 @@ export default function Account() {
 						<div className={styles.headingBox}>
 							<Heading className={styles.heading}>{tab}</Heading>
 							<div className={styles.vertAlign}>
-								<Link to={'/' + id}><Button>View Profile</Button></Link>
+								<Link to={'/' + id}><Button className={utilStyles.btnGreen}>View Profile</Button></Link>
 							</div>
 						</div>
 						<div className={styles.tabBox}>
-							<button className={styles.tabButton + ' ' + (tab === 'feed' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('feed')}>Feed</button>
-							<button className={styles.tabButton + ' ' + (tab === 'settings' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('settings')}>Settings</button>
+							<Button className={styles.tabButton + ' ' + (tab === 'feed' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('feed')}>Feed</Button>
+							<Button className={styles.tabButton + ' ' + (tab === 'settings' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('settings')}>Settings</Button>
 						</div>
 						<div className={styles.sectionBox}>
 						{
@@ -94,7 +95,7 @@ export default function Account() {
 						<div className={styles.headingBox}>
 							<Heading className={styles.heading}>User Not Found.</Heading>
 							<div className={styles.vertAlign}>
-								<a href={url + '/' + API_VERSION + '/login'}><Button>Login</Button></a>
+								<a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
 							</div>
 						</div>	
 					</>

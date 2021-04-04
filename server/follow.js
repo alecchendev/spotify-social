@@ -72,6 +72,31 @@ router.get('/:followingId', authenticateToken, async (req, res) => {
 })
 
 // Have the user follow this person
+router.post('/:followingId', authenticateToken, async (req, res) => {
+
+	const id = req.data.id; // cookie
+	const followingId = req.params.followingId;
+
+	const query = `insert into following (user_id, following_id) values ($1, $2);`;
+
+	try {
+		const queryRes = await client.query(query, [ id, followingId ]);
+		console.log('Now following user: ' + followingId);
+
+		res.send({
+			status: 200
+		});
+
+	} catch (err) {
+
+		console.log(err);
+		res.send({
+			status: 400
+		})
+
+	}
+
+})
 
 // Have the user unfollow this person
 

@@ -16,6 +16,18 @@ export async function checkJWTAuth() {
 
 }
 
+export async function getIsFollowing(id) {
+
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/follow/' + id,
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+	
+}
+
 export async function changePrivateMode(id) {
 	console.log('Called changePrivateMode');
 

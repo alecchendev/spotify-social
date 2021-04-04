@@ -37,6 +37,11 @@
 	justify-content: space-between;
 }
 
+.followButton {
+	width: 50%;
+	margin-top: 20px;
+}
+
 .current {
 	margin-top: 50px;
 }

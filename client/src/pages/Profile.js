@@ -1,16 +1,18 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { checkJWTAuth, getProfileData } from '../lib/api.js';
+import { checkJWTAuth, getProfileData, getIsFollowing } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
 import styles from '../styles/profile.module.css';
+import utilStyles from '../styles/utils.module.css';
 import { Track, Artist, Text } from '../components';
 
 export default function Profile() {
 
 	const [ profileData, setProfileData ] = React.useState({});
 	const [ auth, setAuth ] = React.useState(false);
+	const [ following, setFollowing ] = React.useState(false);
 
 	const { id } = useParams();
 
@@ -41,6 +43,18 @@ export default function Profile() {
 
 		checkAuth();
 
+		const checkIsFollowing = async (id) => {
+			
+			try {
+				const followingRes = await getIsFollowing(id);
+				setFollowing(followingRes.data.isFollowing);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+
+		checkIsFollowing(id);
+
 	}, []);
 
 
@@ -65,6 +79,16 @@ export default function Profile() {
 							<Kicker>Profile</Kicker>
 							<Heading>{profileData.user.display_name}</Heading>
 							<Text>{profileData.user.followers.total} Followers</Text>
+							{
+								auth &&
+								(
+									following === false
+									?
+									<Button className={styles.followButton + ' ' + utilStyles.btnGreen}>Follow</Button>
+									:
+									<Button className={styles.followButton + ' ' + utilStyles.btnBlack}>Following</Button>
+								)
+							}
 						</div>
 
 					</div>
@@ -123,10 +147,10 @@ export default function Profile() {
 			}
 
 			<div className={styles.buttonBox}>
-				<Link to='/'><Button>Home</Button></Link>
+				<Link to='/'><Button className={utilStyles.btnGreen}>Home</Button></Link>
 				{
 					auth &&
-					<Link to={'/account/' + id}><Button>Account</Button></Link>
+					<Link to={'/account/' + id}><Button className={utilStyles.btnGreen}>Account</Button></Link>
 				}
 			</div>
 		</div>
