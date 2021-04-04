@@ -111,12 +111,16 @@
 
 @media screen and (max-width: 50rem) {
 
+	.topBox {
+		position: relative;
+	}
+
 	.headingBox {
 		flex-direction: column;
 	}
 
 	.vertAlign {
-		width: 50%;
+		width: 55%;
 		flex-direction: row;
 		justify-content: center;
 		margin: auto;
