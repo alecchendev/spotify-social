@@ -77,7 +77,7 @@
 	}
 
 	.buttonBox {
-		width: 80%;
+		width: 50%;
 		height: 100px;
 		margin: 25px auto;
 		flex-direction: column;

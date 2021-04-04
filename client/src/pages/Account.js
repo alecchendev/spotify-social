@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getAccountData, changePrivateMode, getPrivateMode } from '../lib/api.js';
 import styles from '../styles/account.module.css';
-import { Text, Button, Heading, Kicker, Feed, Preferences } from '../components';
+import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
 
 const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATE
@@ -77,15 +77,15 @@ export default function Account() {
 						</div>
 						<div className={styles.tabBox}>
 							<button className={styles.tabButton + ' ' + (tab === 'feed' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('feed')}>Feed</button>
-							<button className={styles.tabButton + ' ' + (tab === 'preferences' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('preferences')}>Preferences</button>
+							<button className={styles.tabButton + ' ' + (tab === 'settings' ? styles.tabButtonTrue : styles.tabButtonFalse)} onClick={() => switchTab('settings')}>Settings</button>
 						</div>
 						<div className={styles.sectionBox}>
 						{
-							(tab === 'feed' && tab !== 'preferences')
+							(tab === 'feed' && tab !== 'settings')
 							?
 							<Feed feed={accountData.feed} />
 							:
-							<Preferences handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
+							<Settings handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
 						}
 						</div>
 					</>

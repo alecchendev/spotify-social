@@ -1,7 +1,7 @@
-import styles from '../styles/preferences.module.css';
+import styles from '../styles/settings.module.css';
 import { Text, Toggle } from '.';
 
-export default function Preferences({ handleChange, url, privateMode }) {
+export default function Settings({ handleChange, url, privateMode }) {
 	return (
 		<div>
 

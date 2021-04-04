@@ -97,4 +97,12 @@
 		flex-direction: column;
 	}
 
+	.vertAlign {
+		width: 50%;
+		flex-direction: row;
+		justify-content: center;
+		margin: auto;
+		margin-top: 20px;
+	}
+
 }
