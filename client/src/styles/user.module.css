@@ -104,9 +104,9 @@
 	}
 
 	.recentBox {
-		width: 50%;
-		margin: auto;
-		margin-top: 15px;
+		width: 100%;
+		/* margin: auto; */
+		margin-top: 10px;
 	}
 
 	.recentLabel {
