@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { checkJWTAuth, getProfileData, getIsFollowing } from '../lib/api.js';
+import { checkJWTAuth, getProfileData, getIsFollowing, followUser } from '../lib/api.js';
 import Button from '../components/button.js';
 import Heading from '../components/heading.js';
 import Kicker from '../components/kicker.js';
@@ -15,6 +15,16 @@ export default function Profile() {
 	const [ following, setFollowing ] = React.useState(false);
 
 	const { id } = useParams();
+
+	const checkIsFollowing = async (id) => {
+			
+		try {
+			const followingRes = await getIsFollowing(id);
+			setFollowing(followingRes.data.isFollowing);
+		} catch (err) {
+			console.log(err);
+		}
+	}
 
 	React.useEffect(() => {
 
@@ -43,19 +53,16 @@ export default function Profile() {
 
 		checkAuth();
 
-		const checkIsFollowing = async (id) => {
-			
-			try {
-				const followingRes = await getIsFollowing(id);
-				setFollowing(followingRes.data.isFollowing);
-			} catch (err) {
-				console.log(err);
-			}
-		}
+		
 
 		checkIsFollowing(id);
 
 	}, []);
+
+	const handleFollow = async () => {
+		await followUser(id);
+		checkIsFollowing(id);
+	}
 
 
 	return (
@@ -84,9 +91,9 @@ export default function Profile() {
 								(
 									following === false
 									?
-									<Button className={styles.followButton + ' ' + utilStyles.btnGreen}>Follow</Button>
+									<Button className={styles.followButton + ' ' + utilStyles.btnGreen} onClick={handleFollow}>Follow</Button>
 									:
-									<Button className={styles.followButton + ' ' + utilStyles.btnBlack}>Following</Button>
+									<Button className={styles.followButton + ' ' + utilStyles.btnBlackOutlined}>Following</Button>
 								)
 							}
 						</div>

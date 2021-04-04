@@ -38,7 +38,7 @@
 }
 
 .followButton {
-	width: 50%;
+	width: 200px;
 	margin-top: 20px;
 }
 
@@ -79,6 +79,10 @@
 		margin: 0;
 		margin-top: 20px;
 		text-align: center;
+	}
+
+	.followButton {
+		margin: 20px auto 0;
 	}
 
 	.buttonBox {

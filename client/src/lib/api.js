@@ -16,6 +16,18 @@ export async function checkJWTAuth() {
 
 }
 
+export async function followUser(id) {
+
+	const options = {
+		method: 'post',
+		url: url + '/' + API_VERSION + '/follow/' + id,
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+
+}
+
 export async function getIsFollowing(id) {
 
 	const options = {
@@ -25,7 +37,7 @@ export async function getIsFollowing(id) {
 		json: true
 	};
 	return await axios(options);
-	
+
 }
 
 export async function changePrivateMode(id) {
