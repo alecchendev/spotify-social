@@ -2,6 +2,7 @@
 
 .track {
 	display: flex;
+	padding-right: 10px;
 }
 
 .infoBox {

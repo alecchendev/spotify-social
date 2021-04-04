@@ -21,6 +21,11 @@ export default function Profile() {
 	const [ following, setFollowing ] = React.useState(false);
 	const [ copied, setCopied ] = React.useState(false);
 
+	const [ timeRange, setTimeRange ] = React.useState({
+		tracks: 'short_term',
+		artists: 'medium_term'
+	});
+
 	const { id } = useParams();
 
 	const checkIsFollowing = async (id) => {
@@ -106,6 +111,12 @@ export default function Profile() {
 		setCopied(true);
 	}
 
+	const changeTimeRange = (section, newValue) => {
+		const newTimeRange = {...timeRange};
+		newTimeRange[section] = newValue;
+		setTimeRange(newTimeRange);
+	}
+
 
 	return (
 		<div className={styles.wrapper}>
@@ -119,8 +130,6 @@ export default function Profile() {
 							auth
 							&&
 							<Link to={'/account/' + myId}><Button className={utilStyles.btnGreen}>← Account</Button></Link>
-							// :
-							// <a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
 						}
 					</div>
 					<div className={styles.header}>
@@ -181,7 +190,27 @@ export default function Profile() {
 
 								<div className={styles.topSection}>
 									<Kicker>Top Tracks</Kicker>
-									{profileData.tracks.items.map(track => {
+									<div className={styles.timeFilter}>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'short_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'short_term')}
+										>
+											4 Weeks
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'medium_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'medium_term')}
+										>
+											6 Months
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.tracks === 'long_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('tracks', 'long_term')}
+										>
+											All Time
+										</Button>
+									</div>
+									{profileData.tracks[timeRange.tracks].items.map(track => {
 										return (
 											<div className={styles.item}>
 												<Track item={track}/>
@@ -192,7 +221,27 @@ export default function Profile() {
 
 								<div className={styles.topSection}>
 									<Kicker>Top Artists</Kicker>
-									{profileData.artists.items.map(artist => {
+									<div className={styles.timeFilter}>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'short_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'short_term')}
+										>
+											4 Weeks
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'medium_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'medium_term')}
+										>
+											6 Months
+										</Button>
+										<Button
+											className={utilStyles.btnBlack  + ' ' + (timeRange.artists === 'long_term' ? styles.tabButtonTrue : styles.tabButtonFalse)}
+											onClick={() => changeTimeRange('artists', 'long_term')}
+										>
+											All Time
+										</Button>
+									</div>
+									{profileData.artists[timeRange.artists].items.map(artist => {
 										return (
 											<div className={styles.item}>
 											<Artist item={artist}/>

@@ -67,6 +67,22 @@
 	width: 50%;
 }
 
+.timeFilter {
+	margin-top: 5px;
+}
+
+.tabButtonTrue {
+	background-color: white;
+	color: black;
+	margin-top: 5px;
+}
+
+.tabButtonFalse {
+	background-color: black;
+	color: white;
+	margin-top: 5px;
+}
+
 .item {
 	margin-top: 15px;
 	margin-bottom: 15px;
@@ -119,5 +135,10 @@
 	.topSection {
 		width: 100%;
 		margin-top: 40px;
+	}
+
+	.timeFilter {
+		width: 50%;
+		margin: auto;
 	}
 }
