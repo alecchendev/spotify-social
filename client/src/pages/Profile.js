@@ -89,8 +89,7 @@ export default function Profile() {
 			}
 			{
 				(profileData !== ''
-				&& Object.keys(profileData).length !== 0
-				&& (privateMode === false || me === true))
+				&& Object.keys(profileData).length !== 0)
 				?
 				<div>
 					<div className={styles.header}>
@@ -118,59 +117,63 @@ export default function Profile() {
 
 					</div>
 
-					<div className={styles.current}>
-						{
-							profileData.current !== ''
-							?
-							<Kicker>Currently Playing</Kicker>
-							:
-							<Kicker>Last Played</Kicker>
-						}
-						<div className={styles.currentContent}>
-							{
-								profileData.current !== ''
-								?
-								<Track item={profileData.current.item} />
-								:
-								<Track item={profileData.recent.items[0].track}/>
-							}
+					{
+						(privateMode === false || me === true)
+						?
+						<div>
+							<div className={styles.current}>
+								{
+									profileData.current !== ''
+									?
+									<Kicker>Currently Playing</Kicker>
+									:
+									<Kicker>Last Played</Kicker>
+								}
+								<div className={styles.currentContent}>
+									{
+										profileData.current !== ''
+										?
+										<Track item={profileData.current.item} />
+										:
+										<Track item={profileData.recent.items[0].track}/>
+									}
+								</div>
+							</div>
+
+							<div className={styles.top}>
+
+								<div className={styles.topSection}>
+									<Kicker>Top Tracks</Kicker>
+									{profileData.tracks.items.map(track => {
+										return (
+											<div className={styles.item}>
+												<Track item={track}/>
+											</div>
+										);
+									})}
+								</div>
+
+								<div className={styles.topSection}>
+									<Kicker>Top Artists</Kicker>
+									{profileData.artists.items.map(artist => {
+										return (
+											<div className={styles.item}>
+											<Artist item={artist}/>
+											</div>
+											);
+										})}
+								</div>
+
+							</div>
 						</div>
-					</div>
-
-					<div className={styles.top}>
-
-						<div className={styles.topSection}>
-							<Kicker>Top Tracks</Kicker>
-							{profileData.tracks.items.map(track => {
-								return (
-									<div className={styles.item}>
-										<Track item={track}/>
-									</div>
-								);
-							})}
+						:
+						<div>
+							<br/>
+							This account is private.
+							<br/>
 						</div>
-
-						<div className={styles.topSection}>
-							<Kicker>Top Artists</Kicker>
-							{profileData.artists.items.map(artist => {
-								return (
-									<div className={styles.item}>
-									<Artist item={artist}/>
-									</div>
-									);
-								})}
-						</div>
-
-					</div>
-				</div>
-				:
-				(profileData !== ''
-				&& Object.keys(profileData).length !== 0
-				&& privateMode === true)
-				?
-				<div>
-					This account is private.
-					<br/>
+					}
+					
 				</div>
 				:
 				(profileData !== '')
