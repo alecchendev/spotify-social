@@ -9,8 +9,8 @@ const express = require('express');
 const router = express.Router();
 
 // DB
-const { Client } = require('pg');
-const client = new Client({
+const { Pool } = require('pg');
+const client = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false,
