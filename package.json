@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node api/index.js",
-    "dev": "concurrently \"nodemon api/local/apiLocal.js\" \"cd client && npm run start\"",
+    "dev": "concurrently \"nodemon api/apiLocal.js\" \"cd client && npm run start\"",
     "build": "cd client && npm install && npm run build && cd ..",
     "heroku-postbuild": "npm run build",
     "test": "echo \"Error: no test specified\" && exit 1"
