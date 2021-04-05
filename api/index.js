@@ -3,7 +3,7 @@ const express = require('express');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const path = require('path');
-const api = require('./routes/v1');
+// const api = require('./routes/v1');
 
 const app = express();
 
@@ -28,7 +28,7 @@ app.use('/', (req, res) => {
   })
 });
 
-app.use('/v1', api);
+// app.use('/v1', api);
 
 app.get('*', (req, res) => {
   // res.sendFile(path.join(__dirname, '../client/build/index.html'));
