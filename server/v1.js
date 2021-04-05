@@ -19,7 +19,7 @@ const client = new Client({
 client.connect();
 
 // Constants
-const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const url = process.env.NODE_ENV === 'production' ? 'https://morning-oasis-60015.herokuapp.com' : 'http://localhost:5000';
 const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://www.spotifysocial.me' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
 const clientId = process.env.CLIENT_ID;
