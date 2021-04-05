@@ -1,7 +1,7 @@
 require('dotenv').config({ path: require('find-config')('.env') });
-const { generateRandomString } = require('./utils');
-const { generateAccessToken, authenticateToken } = require('./jwt');
-const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent, getOtherUser } = require('./spotify');
+const { generateRandomString } = require('../lib/utils');
+const { generateAccessToken, authenticateToken } = require('../lib/jwt');
+const { getAuth, getUser, getArtists, getTracks, getCurrent, getRecent, getOtherUser } = require('../lib/spotify');
 const querystring = require('querystring');
 const axios = require('axios');
 const followApi = require('./follow');
