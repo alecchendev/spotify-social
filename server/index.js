@@ -21,10 +21,7 @@ app.use(cors({
 app.use(cookieParser());
 
 
-app.use('/' + process.env.API_VERSION, (req, res, next) => {
-  res.setHeader('Cache-Control', 's-max-age=1, stale-while-revalidate');
-  next();
-}, api);
+app.use('/' + process.env.API_VERSION, api);
 
 app.get('*', (req, res) => {
   // res.sendFile(path.join(__dirname, '../client/build/index.html'));
@@ -34,8 +31,6 @@ app.get('*', (req, res) => {
 app.use(express.static(path.join(__dirname, '../client/build')));
 
 const port = process.env.PORT || 5000 || '0.0.0.0';
-// app.listen(port);
+app.listen(port);
 
-// console.log(`spotify-social listening on ${port}`);
-
-module.exports = app;
+console.log(`spotify-social listening on ${port}`);
