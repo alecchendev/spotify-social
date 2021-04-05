@@ -9,8 +9,8 @@ import styles from '../styles/home.module.css';
 import utilStyles from '../styles/utils.module.css';
 
 // const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
-const url = process.env.NODE_ENV === 'production' ? 'https://spotifysocial.me/api' : 'http://localhost:5000';
-const API_VERSION = 'v1'; // TEMPORARY FIX LATER
+const url = process.env.NODE_ENV === 'production' ? 'https://spotifysocial.me' : 'http://localhost:5000';
+const API_VERSION = 'api'; // TEMPORARY FIX LATER
 
 export default function Home() {
 
