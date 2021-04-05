@@ -102,14 +102,14 @@ app.get('/callback', async (req, res) => {
 });
 
 // JWT Auth check
-router.get('/jwtAuth', authenticateToken, (req, res) => {
+app.get('/jwtAuth', authenticateToken, (req, res) => {
 	res.send({
 		...req.data
 	});
 })
 
 // Get other user profile for feed
-router.get('/other/:id', async (req, res) => {
+app.get('/other/:id', async (req, res) => {
 
 	const myId = req.query.myId;
 	const id = req.params.id;
@@ -160,7 +160,7 @@ router.get('/other/:id', async (req, res) => {
 })
 
 // Profile data
-router.get('/:id', async (req, res) => {
+app.get('/:id', async (req, res) => {
 	const id = req.params.id;
 	const query = `select refresh_token from users where user_id = $1`;
 	const followerQuery = `select count(*) from following where following_id = $1;`;

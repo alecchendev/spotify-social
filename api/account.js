@@ -1,7 +1,7 @@
 require('dotenv').config({ path: require('find-config')('.env') });
 const { authenticateToken } = require('./lib/jwt');
 const express = require('express');
-const router = express.App();
+const router = express();
 
 // DB
 const { Pool } = require('pg');
