@@ -1,6 +1,8 @@
 import httpProxy from 'http-proxy'
 import Cookies from 'cookies'
 import url from 'url'
+const express = require('express')
+const app = express();
 // Get the actual API_URL as an environment variable. For real
 // applications, you might want to get it from 'next/config' instead.
 // const API_URL = process.env.API_URL
@@ -16,7 +18,7 @@ export const config = {
         bodyParser: false
     }
 }
-module.exports = (req, res) => {
+app.get('*', (req, res) => {
     // Return a Promise to let Next.js know when we're done
     // processing the request:
     return new Promise((resolve, reject) => {
@@ -93,4 +95,6 @@ module.exports = (req, res) => {
             })
         }
     })
-}
+})
+
+module.exports = app;
