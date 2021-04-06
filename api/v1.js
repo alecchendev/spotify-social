@@ -16,7 +16,7 @@ export const config = {
         bodyParser: false
     }
 }
-export default (req, res) => {
+module.exports = (req, res) => {
     // Return a Promise to let Next.js know when we're done
     // processing the request:
     return new Promise((resolve, reject) => {
