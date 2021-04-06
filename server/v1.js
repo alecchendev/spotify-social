@@ -20,7 +20,7 @@ client.connect();
 
 // Constants
 const url = process.env.NODE_ENV === 'production' ? 'https://morning-oasis-60015.herokuapp.com' : 'http://localhost:5000';
-const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://spotify-social-jxxfudppz-alecchendev.vercel.app/' : 'http://localhost:3000';
+const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://spotify-social-jxxfudppz-alecchendev.vercel.app' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.CLIENT_SECRET;

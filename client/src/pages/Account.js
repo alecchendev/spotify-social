@@ -5,8 +5,8 @@ import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
 
-const url = process.env.NODE_ENV === 'production' ? 'https://morning-oasis-60015.herokuapp.com' : 'http://localhost:5000';
-const API_VERSION = 'v1'; // TEMPORARY FIX LATE
+const url = process.env.NODE_ENV === 'production' ? 'https://spotify-social-jxxfudppz-alecchendev.vercel.app' : 'http://localhost:5000';
+const API_VERSION = 'api'; // TEMPORARY FIX LATE
 
 export default function Account() {
 
