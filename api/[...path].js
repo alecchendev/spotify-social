@@ -24,7 +24,7 @@ export default (req, res) => {
         // we'll need to intercept the API response.
         // More on that in a bit.
         const pathname = url.parse(req.url).pathname
-        const isLogin = pathname === '/api/login'
+        const isLogin = pathname === '/api/v1/login'
         // Get the `auth-token` cookie:
         const cookies = new Cookies(req, res)
         const authToken = cookies.get('jwtToken')
