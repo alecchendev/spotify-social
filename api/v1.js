@@ -1,13 +1,13 @@
-import httpProxy from 'http-proxy'
-import Cookies from 'cookies'
-import url from 'url'
-const express = require('express')
+const httpProxy = require('http-proxy');
+const Cookies = require('cookies');
+const url = require('url');
+const express = require('express');
 const app = express();
 // Get the actual API_URL as an environment variable. For real
 // applications, you might want to get it from 'next/config' instead.
 // const API_URL = process.env.API_URL
-const API_URL = 'https://morning-oasis-60015.herokuapp.com'
-const proxy = httpProxy.createProxyServer()
+const API_URL = 'https://morning-oasis-60015.herokuapp.com';
+const proxy = httpProxy.createProxyServer();
 // You can export a config variable from any API route in Next.js.
 // We'll use this to disable the bodyParser, otherwise Next.js
 // would read and parse the entire request body before we
@@ -17,7 +17,8 @@ export const config = {
     api: {
         bodyParser: false
     }
-}
+};
+
 app.get('*', (req, res) => {
     // Return a Promise to let Next.js know when we're done
     // processing the request:
@@ -95,6 +96,6 @@ app.get('*', (req, res) => {
             })
         }
     })
-})
+});
 
 module.exports = app;
