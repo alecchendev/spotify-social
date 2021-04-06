@@ -1,0 +1,40 @@
+
+
+.track {
+	display: flex;
+	padding-right: 10px;
+}
+
+.infoBox {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	margin-left: 15px;
+}
+
+.albumBox {
+	width: 100px;
+	height: 100px;
+	flex-shrink: 0;
+	background-color: gray;
+}
+
+.albumImg {
+	width: 100%;
+	height: 100%;
+}
+
+.songTitle {
+	transition: 0.25s;
+}
+
+.songTitle:hover {
+	color: var(--green);
+	cursor: pointer;
+}
+
+.player {
+	display: none;
+	/* width: 100px; */
+	/* margin-top: 5px; */
+}

@@ -1,0 +1,17 @@
+
+
+.wrapper {
+	--desktop-width: 53rem;
+	--mobile-width: 90%;
+	max-width: var(--desktop-width);
+	/* padding-top: 100px; */
+	margin: auto;
+}
+
+@media screen and (max-width: 58.9rem) {
+
+	.wrapper {
+		max-width: var(--mobile-width);
+	}
+
+}

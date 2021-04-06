@@ -1,0 +1,50 @@
+
+.wrapper {
+	padding-top: 100px;
+}
+
+.subtitle {
+	margin-top: 15px;
+}
+
+.searchBox {
+	width: 80%;
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px;
+}
+
+.vertAlign {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.content {
+	margin-top: 25px;
+}
+
+@media screen and (max-width: 50rem) {
+
+	.wrapper a {
+		width: 100%;
+	}
+
+	.wrapper button {
+		width: 100%;
+	}
+
+	.vertAlign {
+		flex-direction: row;
+		justify-content: center;
+		width: 50%;
+		margin: auto;
+		margin-top: 20px;
+	}
+
+	.searchBox {
+		width: 100%;
+		flex-direction: column;
+	}
+
+}

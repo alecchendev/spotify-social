@@ -1,0 +1,144 @@
+
+.wrapper {
+	padding-top: 100px;
+}
+
+.navButtonBox {
+	margin-bottom: 25px;
+}
+
+.header {
+	display: flex;
+}
+
+.imgBox {
+	width: 250px;
+	height: 250px;
+	border-radius: 9999px;
+	flex-shrink: 0;
+	overflow: hidden;
+	background-color: gray;
+}
+
+.profileImg {
+	width: 100%;
+	height: 100%;
+}
+
+.headerBox {
+	margin-left: 50px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.headerBox h1 {
+	line-height: 1.1;
+	margin: 10px 0 10px;
+}
+
+.followCopyButtonBox {
+	margin-top: 20px;
+}
+
+.leftButton {
+	width: 200px;
+	margin-right: 15px;
+}
+
+.copyButton {
+	width: 200px;
+}
+
+.current {
+	margin-top: 50px;
+}
+
+.currentContent {
+	margin-top: 10px;
+}
+
+.top {
+	margin-top: 50px;
+	display: flex;
+}
+
+.topSection {
+	width: 50%;
+}
+
+.timeFilter {
+	margin-top: 5px;
+}
+
+.tabButtonTrue {
+	background-color: white;
+	color: black;
+	margin-top: 5px;
+}
+
+.tabButtonFalse {
+	background-color: black;
+	color: white;
+	margin-top: 5px;
+}
+
+.item {
+	margin-top: 15px;
+	margin-bottom: 15px;
+}
+
+@media screen and (max-width: 50rem) {
+
+	.header {
+		flex-direction: column;
+		margin: auto;
+	}
+
+	.navButtonBox {
+		width: 200px;
+		margin: 0 auto 25px;
+	}
+
+	.imgBox {
+		margin: auto;
+	}
+
+	.headerBox {
+		margin: 0;
+		margin-top: 20px;
+		text-align: center;
+	}
+
+	.followCopyButtonBox {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.leftButton {
+		margin: 0 auto 20px;
+	}
+
+	.copyButton {
+		margin: auto;
+	}
+
+	.current {
+		margin-top: 30px;
+	}
+	
+	.top {
+		flex-direction: column;
+		margin-top: 0;
+	}
+
+	.topSection {
+		width: 100%;
+		margin-top: 40px;
+	}
+
+	.timeFilter {
+		width: 50%;
+		margin: auto;
+	}
+}
