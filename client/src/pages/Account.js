@@ -5,7 +5,7 @@ import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings } from '../components';
 
-const url = process.env.NODE_ENV === 'production' ? 'https://spotify-social-jxxfudppz-alecchendev.vercel.app/api' : 'http://localhost:5000';
+const url = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATE
 
 export default function Account() {
