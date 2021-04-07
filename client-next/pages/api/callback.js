@@ -2,7 +2,7 @@
 // Login/auth callback
 const app = require('express')()
 
-app.get('/api/callback', (req, res) => {
+app.get('/', (req, res) => {
 	const { jwtToken, id } = req.query;
 
   res.cookie('jwtToken', jwtToken, {
