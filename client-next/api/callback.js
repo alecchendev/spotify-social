@@ -1,8 +1,7 @@
 
 // Login/auth callback
-const app = require('express')()
 
-app.get('/', (req, res) => {
+module.exports = (req, res) => {
 	const { jwtToken, id } = req.query;
 
   res.cookie('jwtToken', jwtToken, {
@@ -13,9 +12,7 @@ app.get('/', (req, res) => {
   const fullUrl = req.protocol + '://' + req.get('host');
 
   res.redirect(fullUrl + '/account/' + id);
-})
-
-module.exports = app
+};
 
 
 // module.exports = (req, res) => {
