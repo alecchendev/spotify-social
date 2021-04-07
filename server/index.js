@@ -12,7 +12,7 @@ app.use(cors());
 //   origin: [
 //     'http://localhost:3000', // frontend
 //     'http://my-spotify-social.herokuapp.com',
-//     'https://www.spotifysocial.me'
+//     'https://www.spotifysocial.me' // will have to add indivdually deployed branch
 //   ],
 //   credentials: true // for cookies
 // }));

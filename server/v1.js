@@ -19,7 +19,7 @@ const client = new Client({
 client.connect();
 
 // Constants
-const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const url = process.env.NODE_ENV === 'production' ? 'https://morning-oasis-60015.herokuapp.com' : 'http://localhost:5000';
 const frontendUrl = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:3000';
 const redirectUri = [url, process.env.API_VERSION, 'callback'].join('/');
 const clientId = process.env.CLIENT_ID;
@@ -72,18 +72,24 @@ router.get('/callback', async (req, res) => {
 		const jwtToken = generateAccessToken({ id: id });
 
 		// Set httponly cookie
-		res.cookie('jwtToken', jwtToken, {
-			expires: new Date(Date.now() + (1000 * 60 * 30)),
-			httpOnly: true
-		});
+		// res.cookie('jwtToken', jwtToken, {
+		// 	expires: new Date(Date.now() + (1000 * 60 * 30)),
+		// 	httpOnly: true
+		// });
 
-		res.send({
-			jwtToken,
-			id,
-			frontendUrl
-		});
+		// res.send({
+		// 	jwtToken,
+		// 	id,
+		// 	frontendUrl
+		// });
 
 		// res.redirect(frontendUrl + '/account/' + id);
+		res.redirect(frontendUrl + '/api/callback?' +
+			querystring.stringify({
+				jwtToken: jwtToken,
+				id: id
+			})
+		);
 
 	} catch (err) {
 

@@ -7,7 +7,8 @@ import { Layout, Button, Heading, Kicker, Track, Artist, Text } from '../compone
 import styles from '../styles/profile.module.css';
 import utilStyles from '../styles/utils.module.css';
 
-const url = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000';
+// const url = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000';
+const url = process.env.NODE_ENV === 'production' ? 'https://morning-oasis-60015.herokuapp.com' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATE
 
 export default function Profile() {

@@ -7,8 +7,8 @@ function generateAccessToken(id) {
 
 function authenticateToken(req, res, next) {
   console.log('Called authenticateToken');
-  // const token = req.cookies.jwtToken || null;
-  const token = req.header('jwtToken') || null;
+  const token = req.cookies.jwtToken || null;
+  // const token = req.header('jwtToken') || null;
 
   if (token == null) return res.sendStatus(401);
 
