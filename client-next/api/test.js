@@ -1,13 +1,8 @@
 
-const express = require('express');
-const app = express();
-
-app.get('/', (req, res) => {
+module.exports = (req, res) => {
 
 	res.send({
 		sanityCheck: 'sane',
-		url: req
+		req: req
 	});
-});
-
-module.exports = app;
+};
