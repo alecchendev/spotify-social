@@ -11,6 +11,11 @@ module.exports = (req, res) => {
 
   const fullUrl = req.protocol + '://' + req.get('host');
 
-  res.redirect(fullUrl + '/account/' + id);
+  // res.redirect(fullUrl + '/account/' + id);
+  res.send({
+    jwtToken,
+    id,
+    fullUrl
+  })
 
 };
