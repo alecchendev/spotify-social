@@ -1,7 +1,13 @@
 
-module.exports = (req, res) => {
+const express = require('express');
+const app = express();
+
+app.get('/', (req, res) => {
 
 	res.send({
-		sanityCheck: 'sane'
+		sanityCheck: 'sane',
+		url: req
 	});
-};
+});
+
+module.exports = app;
