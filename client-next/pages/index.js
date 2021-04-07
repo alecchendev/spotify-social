@@ -5,7 +5,7 @@ import { Layout, Button, Heading, TextInput, Text } from '../components';
 import styles from '../styles/home.module.css';
 import utilStyles from '../styles/utils.module.css';
 
-const url = process.env.NODE_ENV === 'production' ? 'https://my-spotify-social.herokuapp.com' : 'http://localhost:5000';
+const url = process.env.NODE_ENV === 'production' ? '/api' : 'http://localhost:5000';
 const API_VERSION = 'v1'; // TEMPORARY FIX LATER
 
 export default function Home() {

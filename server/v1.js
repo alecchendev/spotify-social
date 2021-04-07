@@ -77,7 +77,13 @@ router.get('/callback', async (req, res) => {
 			httpOnly: true
 		});
 
-		res.redirect(frontendUrl + '/account/' + id);
+		res.send({
+			jwtToken,
+			id,
+			frontendUrl
+		});
+
+		// res.redirect(frontendUrl + '/account/' + id);
 
 	} catch (err) {
 
