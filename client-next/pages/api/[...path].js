@@ -1,8 +1,8 @@
 const httpProxy = require('http-proxy');
 const Cookies = require('cookies');
 const url = require('url');
-const express = require('express');
-const app = express();
+// const express = require('express');
+// const app = express();
 // Get the actual API_URL as an environment variable. For real
 // applications, you might want to get it from 'next/config' instead.
 // const API_URL = process.env.API_URL
