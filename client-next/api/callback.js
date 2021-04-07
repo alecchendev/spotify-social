@@ -14,7 +14,7 @@ module.exports = (req, res) => {
   // 	httpOnly: true
   // });
 
-  res.setHeader('Set-Cookie', 'jwtToken=' + jwtToken + '; HttpOnly');
+  res.setHeader('Set-Cookie', 'jwtToken=' + jwtToken + '; HttpOnly; Secure; Max-Age=30000; SameSite=Lax');
   // temp
 
   // res.setHeader('Set-Cookie', cookie.serialize('jwtToken', jwtToken, {
