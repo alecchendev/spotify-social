@@ -14,16 +14,18 @@ module.exports = (req, res) => {
   // 	httpOnly: true
   // });
 
+  res.setHeader('Set-Cookie', 'jwtToken=' + jwtToken + '; HttpOnly');
+
   // res.setHeader('Set-Cookie', cookie.serialize('jwtToken', jwtToken, {
   //   httpOnly: true,
   //   maxAge: 60 * 60 * 24 * 7 // 1 week
   // }));
 
-  cookies.set('jwtToken', jwtToken, {
-    httpOnly: true,
-    expires: new Date(Date.now() + 1000 * 60 * 30),
-    sameSite: 'lax',
-  });
+  // cookies.set('jwtToken', jwtToken, {
+  //   httpOnly: true,
+  //   expires: new Date(Date.now() + 1000 * 60 * 30),
+  //   sameSite: 'lax',
+  // });
 
   // const fullUrl = req.protocol + '://' + req.get('host');
 
