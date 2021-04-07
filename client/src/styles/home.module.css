@@ -24,6 +24,10 @@
 	margin-top: 25px;
 }
 
+.seeProfileBox {
+	margin-top: 25px;
+}
+
 @media screen and (max-width: 50rem) {
 
 	a, button {
@@ -41,6 +45,11 @@
 	.searchBox {
 		width: 100%;
 		flex-direction: column;
+	}
+
+	.seeProfileBox {
+		width: 50%;
+		margin: 20px auto 0;
 	}
 
 }
