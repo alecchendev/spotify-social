@@ -34,6 +34,9 @@ export default function Home() {
 					<a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
 				</div>
 			</div>
+			<div className={styles.seeProfileBox}>
+				<Link to={'/i0yd9nkk6k6nszblfxjr5y0qa'}><Button className={utilStyles.btnGreen}>See a profile</Button></Link>
+			</div>
 			<div className={styles.content}>
 				{
 					deleted

@@ -199,6 +199,7 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 
 		const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
 		const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
+
 		console.log(followingFollowerQuery);
 		const followingFollowerRes = await client.query(followingFollowerQuery, following);
 		console.log(followingFollowerRes.rows);
@@ -234,7 +235,7 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 			const notFollowingRes = await client.query(notFollowingQuery, following);
 			newReccs = notFollowingRes.rows.map(row => row.user_id);
 		}
-
+    
 		res.send({
 			reccs: newReccs
 		});
