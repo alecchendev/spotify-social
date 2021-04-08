@@ -185,6 +185,63 @@ router.get('/account/delete/:id', authenticateToken, async (req, res) => {
 	}
 });
 
+router.get('/reccommendations', authenticateToken, async (req, res) => {
+
+	const id = req.data.id;
+
+	const followingQuery = `select following_id from following where user_id = $1;`;
+
+	try {
+
+		const followingRes = await client.query(followingQuery, [ id ]);
+		console.log('Got following for user: ' + id);
+		const following = followingRes.rows.map(row => { return row.following_id });
+
+		const followingFollowerQuery = `select user_id from following where following_id in (` + following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ') + `);`;
+		console.log(followingFollowerQuery);
+		const followingFollowerRes = await client.query(followingFollowerQuery, following);
+		console.log(followingFollowerRes.rows);
+		const adjUsers = followingFollowerRes.rows.map(row => { return row.user_id });
+		// Counts
+		const counts = {};
+		adjUsers.sort();
+		adjUsers.forEach(userId => {
+			if (!(userId in counts)) {
+				counts[userId] = 0;
+			}
+			counts[userId] += 1;
+		});
+
+		var reccs = [];
+		for (let userId in counts) {
+			reccs.push([userId, counts[userId]]);
+		}
+		reccs.sort(function(a, b) {
+			return b[1] - a[1]; // descending sort
+		});
+
+		const newReccs = [];
+		reccs.forEach(recc => {
+			const userId = recc[0];
+			if (!following.includes(userId)) {
+				newReccs.push(userId);
+			}
+		})
+
+		res.send({
+			reccs: newReccs
+		});
+
+	} catch (err) {
+
+		console.log(err);
+		res.send({
+			message: 'Couldn\'t get reccs for some reason.'
+		});
+
+	}
+})
+
 // JWT Auth check
 router.get('/jwtAuth', authenticateToken, (req, res) => {
 	res.send({

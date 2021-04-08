@@ -5,6 +5,9 @@ import { Link } from 'react-router-dom';
 import Kicker from './kicker';
 
 export default function Explore({ reccs, searchResults }) {
+
+	const reccLimit = 8;
+
 	return (
 		<div>
 
@@ -29,7 +32,7 @@ export default function Explore({ reccs, searchResults }) {
 					{
 						(reccs && reccs.length !== 0)
 						?
-						reccs.map(item => {
+						reccs.slice(0, reccLimit).map(item => {
 							return <div className={styles.recc}>
 								<UserAlt item={item}/>
 							</div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser, getFeedUser } from '../lib/api.js';
+import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser, getFeedUser, getReccommendations } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings, Explore } from '../components';
@@ -48,6 +48,20 @@ export default function Account() {
 
 				const privateRes = await getPrivateMode(id);
 				setPrivateMode(privateRes.data.private);
+
+				const reccRes = await getReccommendations();
+				const reccIds = reccRes.data.reccs;
+				const newReccs = [];
+				for (const recc of reccIds) {
+					const userRes = await getOtherUser(recc, id);
+					const userData = {
+						...userRes.data.user,
+						current: userRes.data.current,
+						recent: userRes.data.recent
+					};
+					newReccs.push(userData);
+				}
+				setReccData(newReccs);
 
 			} catch (err) {
 				console.log(err);

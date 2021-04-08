@@ -19,7 +19,7 @@ export async function checkJWTAuth() {
 export async function getReccommendations() {
 	const options = {
 		method: 'get',
-		url: url + '/' + API_VERSION + '/reccomendations',
+		url: url + '/' + API_VERSION + '/reccommendations',
 		withCredentials: true,
 		json: true
 	};
