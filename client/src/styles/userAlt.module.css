@@ -4,11 +4,15 @@
 .user {
 	display: flex;
 	flex-direction: column;
-	padding: 20px 0;
+	padding: 20px 5px;
 }
 
 .user * {
 	margin: auto;
+}
+
+.userInfo {
+	width: 100%;
 }
 
 .imgBox {
@@ -47,9 +51,11 @@
 	justify-content: center;
 	margin-top: 7.5px;
 	margin-bottom: 5px;
+	width: 65%;
 }
 
 .thinFollowBtn {
+	width: 100%;
 	margin: auto;
 	font-size: 0.65rem !important;
 	padding: 0.5em 1.5em 0.5em !important;
@@ -81,7 +87,7 @@
 	}
 
 	.followBox {
-		width: 55%;
+		width: 65%;
 	}
 
 

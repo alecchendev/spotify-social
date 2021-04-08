@@ -53,7 +53,7 @@ export default function User({ item, follow }) {
 			</div>
 
 			<div className={styles.followBox}>
-				<Button className={styles.thinFollowBtn + ' ' + (following ? utilStyles.btnBlackOutlined : utilStyles.btnGreen)} onClick={handleClick}>{following ? 'Unfollow' : 'Follow'}</Button>
+				<Button className={styles.thinFollowBtn + ' ' + (following ? utilStyles.btnBlackOutlined : utilStyles.btnGreen)} onClick={handleClick}>{following ? 'Following' : 'Follow'}</Button>
 			</div>
 			
 			<div className={styles.nowBox} >
