@@ -2,8 +2,8 @@ import styled from 'styled-components';
 
 const TextInput = styled.input`
 
-	min-width: 300px;
 	padding: 10px;
+	box-sizing: border-box;
 	font-family: DM Sans;
 	font-size: 1.1em;
 	border: none;

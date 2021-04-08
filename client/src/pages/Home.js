@@ -26,7 +26,7 @@ export default function Home() {
 			<Heading>Spotify Social</Heading>
 			<Text className={styles.subtitle}>Search a friend's Spotify username to view their profile or login to activate your own.</Text>
 			<div className={styles.searchBox}>
-				<TextInput type='text' placeholder='Username' onChange={handleChange} />
+				<TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} />
 				<div className={styles.vertAlign}>
 					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
 				</div>

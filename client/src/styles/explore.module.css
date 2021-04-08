@@ -37,6 +37,24 @@
 
 @media screen and (max-width: 50rem) {
 
+	.searchBox {
+		width: 100%;
+		flex-direction: column;
+	}
+
+	.searchBox * {
+		margin: auto;
+	}
+
+	.searchInput {
+		width: 100%;
+	}
+
+	.searchBtnBox {
+		min-width: 50%;
+		margin-top: 15px;
+	}
+
 	.reccContentBox {
 		justify-content: space-between;
 	}
