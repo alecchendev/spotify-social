@@ -197,7 +197,8 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		console.log('Got following for user: ' + id);
 		const following = followingRes.rows.map(row => { return row.following_id });
 
-		const followingFollowerQuery = `select user_id from following where following_id in (` + following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ') + `);`;
+		const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
+		const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
 		console.log(followingFollowerQuery);
 		const followingFollowerRes = await client.query(followingFollowerQuery, following);
 		console.log(followingFollowerRes.rows);
@@ -220,13 +221,19 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 			return b[1] - a[1]; // descending sort
 		});
 
-		const newReccs = [];
+		let newReccs = [];
 		reccs.forEach(recc => {
 			const userId = recc[0];
 			if (!following.includes(userId)) {
 				newReccs.push(userId);
 			}
 		})
+
+		if (newReccs.length === 0) {
+			const notFollowingQuery = `select user_id from users where user_id not in (` + followingParams + `);`;
+			const notFollowingRes = await client.query(notFollowingQuery, following);
+			newReccs = notFollowingRes.rows.map(row => row.user_id);
+		}
 
 		res.send({
 			reccs: newReccs
