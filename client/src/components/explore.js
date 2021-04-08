@@ -3,18 +3,25 @@ import utilStyles from '../styles/utils.module.css';
 import { Button, Text, Toggle, UserAlt, TextInput } from '.';
 import { Link } from 'react-router-dom';
 import Kicker from './kicker';
+import React from 'react';
 
 export default function Explore({ reccs, searchResults, follow }) {
 
 	const reccLimit = 8;
 
+	const [ search, setSearch ] = React.useState('');
+
+	const handleChange = (event) => {
+		setSearch(event.target.value);
+	}
+
 	return (
 		<div>
 
 			<div className={styles.searchBox}>
-				<TextInput className={styles.searchInput} type='text' placeholder='Username' />
+				<TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} />
 				<div className={styles.searchBtnBox + ' ' + styles.vertAlign}>
-					<Button className={utilStyles.btnGreen}>Search</Button>
+					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
 				</div>
 			</div>
 
