@@ -1,0 +1,25 @@
+
+.searchBox {
+	display: flex;
+	justify-content: space-between;
+}
+
+.searchInput {
+	width: 70%;
+}
+
+.searchBtnBox {
+	width: 25%;
+}
+
+.searchBtnBox button {
+	width: 100%;
+}
+
+.contentBox {
+	margin-top: 25px;
+}
+
+.reccContentBox {
+	margin-top: 15px;
+}
