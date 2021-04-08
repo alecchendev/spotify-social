@@ -16,6 +16,16 @@ export async function checkJWTAuth() {
 
 }
 
+export async function getReccommendations() {
+	const options = {
+		method: 'get',
+		url: url + '/' + API_VERSION + '/reccommendations',
+		withCredentials: true,
+		json: true
+	};
+	return await axios(options);
+}
+
 export async function getFollowing() {
 
 	const options = {

@@ -1,0 +1,82 @@
+import styles from '../styles/userAlt.module.css';
+import utilStyles from '../styles/utils.module.css';
+import { Text, Subtext, Kicker, Button } from '.';
+import { Link } from 'react-router-dom';
+import { getIsFollowing, unfollowUser, followUser } from '../lib/api';
+import React from 'react';
+
+export default function User({ item, follow }) {
+
+	const nowItem = item.current === '' ? item.recent.items[0].track : item.current.item;
+
+	const [ following, setFollowing ] = React.useState(false);
+
+	const handleClick = () => {
+		const updateFollowing = async () => {
+			try {
+				if (following) {
+					await unfollowUser(item.id);
+				} else {
+					await followUser(item.id);
+				}
+				const followingRes = await getIsFollowing(item.id);
+				setFollowing(followingRes.data.isFollowing);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+		updateFollowing();
+	}
+
+	return (<div className={styles.user}>
+		<div className={styles.userInfo}>
+			<div className={styles.vertAlign}>
+				<div className={styles.imgBox}>
+				{
+					item && item.images.length > 0 &&
+					<img className={styles.profileImg} alt='Currently playing album cover' src={item.images[0].url}/>
+				}
+				</div>
+
+			</div>
+			
+			<div className={styles.infoBox}>
+				{
+					item
+					?
+					<div>
+						<Link className={styles.userLink} to={'/' + item.id}><Text>{item.display_name}</Text></Link>
+					</div>
+					:
+					<Text>Uhh tbh idk what's happening here.</Text>
+				}
+			</div>
+
+			<div className={styles.followBox}>
+				<Button className={styles.thinFollowBtn + ' ' + (following ? utilStyles.btnBlackOutlined : utilStyles.btnGreen)} onClick={handleClick}>{following ? 'Unfollow' : 'Follow'}</Button>
+			</div>
+			
+			<div className={styles.nowBox} >
+
+				<div className={styles.nowLabel}>
+
+					{
+						item.current !== ''
+						?
+						<Kicker>Currently Playing</Kicker>
+						:
+						<Kicker>Last Played</Kicker>
+						// <Text>Not playing anything atm.</Text>
+					}
+
+				</div>
+
+				<Text className={styles.nowName}>{nowItem.name}</Text>
+				<Subtext className={styles.nowArtist}>{nowItem.artists && nowItem.artists.map(artist => artist.name).join(', ')}</Subtext>
+
+			</div>
+
+		</div>
+
+	</div>);
+}
