@@ -1,10 +1,32 @@
 import styles from '../styles/userAlt.module.css';
-import { Text, Subtext, Kicker  } from '.';
+import utilStyles from '../styles/utils.module.css';
+import { Text, Subtext, Kicker, Button } from '.';
 import { Link } from 'react-router-dom';
+import { getIsFollowing, unfollowUser, followUser } from '../lib/api';
+import React from 'react';
 
-export default function User({ item }) {
+export default function User({ item, follow }) {
 
 	const nowItem = item.current === '' ? item.recent.items[0].track : item.current.item;
+
+	const [ following, setFollowing ] = React.useState(false);
+
+	const handleClick = () => {
+		const updateFollowing = async () => {
+			try {
+				if (following) {
+					await unfollowUser(item.id);
+				} else {
+					await followUser(item.id);
+				}
+				const followingRes = await getIsFollowing(item.id);
+				setFollowing(followingRes.data.isFollowing);
+			} catch (err) {
+				console.log(err);
+			}
+		}
+		updateFollowing();
+	}
 
 	return (<div className={styles.user}>
 		<div className={styles.userInfo}>
@@ -28,6 +50,10 @@ export default function User({ item }) {
 					:
 					<Text>Uhh tbh idk what's happening here.</Text>
 				}
+			</div>
+
+			<div className={styles.followBox}>
+				<Button className={styles.thinFollowBtn + ' ' + (following ? utilStyles.btnBlackOutlined : utilStyles.btnGreen)} onClick={handleClick}>{following ? 'Unfollow' : 'Follow'}</Button>
 			</div>
 			
 			<div className={styles.nowBox} >

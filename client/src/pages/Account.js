@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser, getFeedUser, getReccommendations } from '../lib/api.js';
+import { getAccountData, changePrivateMode, getPrivateMode, getFollowing, getOtherUser, getFeedUser, getReccommendations, followUser } from '../lib/api.js';
 import styles from '../styles/account.module.css';
 import utilStyles from '../styles/utils.module.css';
 import { Text, Button, Heading, Kicker, Feed, Settings, Explore } from '../components';
@@ -16,7 +16,7 @@ export default function Account() {
 	const [ tab, setTab ] = React.useState('feed'); // feed, preferences
 	const [ privateMode, setPrivateMode ] = React.useState(false);
 
-	const [ reccData, setReccData ] = React.useState([]);
+	const [ reccData, setReccData ] = React.useState('');
 
 	const { id } = useParams();
 
@@ -124,7 +124,7 @@ export default function Account() {
 							:
 							(tab !== 'feed' && tab === 'explore' && tab !== 'settings')
 							?
-							<Explore reccs={reccData} />
+							<Explore reccs={reccData} follow={(id) => followUser(id)} />
 							:
 							<Settings handleChange={() => updatePrivate(id)} privateMode={privateMode} url={url + '/' + API_VERSION + '/account/delete/' + id}/>
 						}

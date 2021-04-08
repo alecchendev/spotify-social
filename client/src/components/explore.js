@@ -4,7 +4,7 @@ import { Button, Text, Toggle, UserAlt, TextInput } from '.';
 import { Link } from 'react-router-dom';
 import Kicker from './kicker';
 
-export default function Explore({ reccs, searchResults }) {
+export default function Explore({ reccs, searchResults, follow }) {
 
 	const reccLimit = 8;
 
@@ -30,15 +30,19 @@ export default function Explore({ reccs, searchResults }) {
 					<Kicker>Reccomendations</Kicker>
 					<div className={styles.reccContentBox}>
 					{
+						(reccs === '')
+						?
+						<Text>Loading...</Text>
+						:
 						(reccs && reccs.length !== 0)
 						?
 						reccs.slice(0, reccLimit).map(item => {
 							return <div className={styles.recc}>
-								<UserAlt item={item}/>
+								<UserAlt item={item} follow={(id) => follow(id)} />
 							</div>
 						})
 						:
-						<Text>Loading...</Text>
+						<Text>No reccomendations at this time. Sorry :(</Text>
 					}
 					</div>
 				</div>
