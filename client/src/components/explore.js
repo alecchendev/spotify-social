@@ -1,6 +1,6 @@
 import styles from '../styles/explore.module.css';
 import utilStyles from '../styles/utils.module.css';
-import { Button, Text, Toggle, UserAlt, TextInput } from '.';
+import { Button, Text, Toggle, UserAlt, TextInput, Search } from '.';
 import { Link } from 'react-router-dom';
 import Kicker from './kicker';
 import React from 'react';
@@ -11,15 +11,17 @@ export default function Explore({ reccs, searchResults, follow }) {
 
 	const [ search, setSearch ] = React.useState('');
 
-	const handleChange = (event) => {
-		setSearch(event.target.value);
+	const handleSearch = (searchText) => {
+		setSearch(searchText);
 	}
 
 	return (
 		<div>
 
 			<div className={styles.searchBox}>
-				<TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} />
+				<div className={styles.searchInput} >
+					<Search className={styles.searchInput} search={handleSearch} />
+				</div>
 				<div className={styles.searchBtnBox + ' ' + styles.vertAlign}>
 					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
 				</div>

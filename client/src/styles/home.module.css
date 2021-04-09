@@ -7,14 +7,14 @@
 	margin-top: 15px;
 }
 
-.searchBox {
+.contentBox {
 	width: 80%;
 	display: flex;
 	justify-content: space-between;
 	margin-top: 20px;
 }
 
-.searchInput {
+.searchBox {
 	min-width: 350px;
 }
 
@@ -46,7 +46,7 @@
 		margin-top: 20px;
 	}
 
-	.searchBox {
+	.contentBox {
 		width: 100%;
 		flex-direction: column;
 	}

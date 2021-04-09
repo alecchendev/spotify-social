@@ -1,10 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { getQueryParams } from '../lib/utils.js';
-import Button from '../components/button.js';
-import Heading from '../components/heading.js';
-import TextInput from '../components/textInput.js';
-import Text from '../components/text.js';
+import { Text, TextInput, Heading, Button, Search } from '../components';
 import styles from '../styles/home.module.css';
 import utilStyles from '../styles/utils.module.css';
 
@@ -15,8 +12,9 @@ export default function Home() {
 
 	const [ search, setSearch ] = React.useState('');
 
-	const handleChange = (event) => {
-		setSearch(event.target.value);
+	const handleSearch = (searchText) => {
+		console.log(searchText);
+		setSearch(searchText);
 	}
 
 	const { deleted } = getQueryParams();
@@ -25,8 +23,11 @@ export default function Home() {
 		<div className={styles.wrapper}>
 			<Heading>Spotify Social</Heading>
 			<Text className={styles.subtitle}>Search a friend's Spotify username to view their profile or login to activate your own.</Text>
-			<div className={styles.searchBox}>
-				<TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} />
+			<div className={styles.contentBox}>
+				{/* <TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} /> */}
+				<div className={styles.searchBox}>
+					<Search search={handleSearch} />
+				</div>
 				<div className={styles.vertAlign}>
 					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
 				</div>
