@@ -1,18 +1,35 @@
 import styles from '../styles/explore.module.css';
 import utilStyles from '../styles/utils.module.css';
-import { Button, Text, Toggle, UserAlt, TextInput, Search } from '.';
+import { Button, Text, Toggle, UserAlt, TextInput, Search, SearchResults } from '.';
+import { getSearchResults } from '../lib/api.js';
 import { Link } from 'react-router-dom';
 import Kicker from './kicker';
 import React from 'react';
 
-export default function Explore({ reccs, searchResults, follow }) {
+export default function Explore({ reccs, follow }) {
 
 	const reccLimit = 8;
 
 	const [ search, setSearch ] = React.useState('');
+	const [ searchResults, setSearchResults ] = React.useState([]);
 
-	const handleSearch = (searchText) => {
-		setSearch(searchText);
+	const handleSearch = async (searchText) => {
+		if (searchText === '') {
+			setSearchResults([]);
+		} else {
+			try {
+				const searchRes = await getSearchResults({ searchText });
+				let searchVals = searchRes.data.searchRes;
+				if (searchVals.length === 0) {
+					searchVals = 'No results.';
+				}
+				setSearchResults(searchVals);
+
+			} catch (err) {
+				console.log(err);
+				setSearchResults('Something went wrong.');
+			}
+		}
 	}
 
 	return (
@@ -29,14 +46,19 @@ export default function Explore({ reccs, searchResults, follow }) {
 
 			<div className={styles.contentBox}>
 			{
-				(searchResults && Object.keys(searchResults).length !== 0)
+				(typeof searchResults === 'string' || searchResults instanceof String)
 				?
-				<div className={styles.search}>
-				
+				<Text>{searchResults}</Text>
+				:
+				(searchResults.length !== 0)
+				?
+				<div className={styles.searchResultsBox} >
+					<SearchResults searchResults={searchResults} />
 				</div>
 				:
 				<div className={styles.reccBox}>
 					<Kicker>Reccomendations</Kicker>
+
 					<div className={styles.reccContentBox}>
 					{
 						(reccs === '')

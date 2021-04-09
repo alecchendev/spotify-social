@@ -58,7 +58,6 @@ router.get('/update', async (req, res) => {
 
 		const allUsers = await client.query(usersQuery);
 		for (const row of allUsers.rows) {
-			console.log(row);
 			const { user_id, refresh_token } = row;
 			const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refresh_token);
 			const { access_token, token_type } = accessRes.data;
@@ -144,7 +143,6 @@ router.get('/account/:id', authenticateToken, async (req, res) => {
 
 		try {
 			const queryRes = await client.query(query, [ id ]);
-			console.log(queryRes.rows);
 			if (queryRes.rows.length === 0) {
 				res.sendStatus(404); // If id doesn't exist in table
 			}
@@ -240,9 +238,7 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
 		const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
 
-		console.log(followingFollowerQuery);
 		const followingFollowerRes = await client.query(followingFollowerQuery, following);
-		console.log(followingFollowerRes.rows);
 		const adjUsers = followingFollowerRes.rows.map(row => { return row.user_id });
 		// Counts
 		const counts = {};
