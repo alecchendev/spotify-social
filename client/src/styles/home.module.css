@@ -7,28 +7,43 @@
 	margin-top: 15px;
 }
 
-.searchBox {
-	width: 80%;
+.contentBox {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-start;
 	margin-top: 20px;
 }
 
-.searchInput {
+.searchBox {
 	min-width: 350px;
+}
+
+.searchResultsBox {
+	margin-top: 15px;
+}
+
+.searchMessage {
+	margin-top: 15px !important;
+}
+
+.buttonBoxWrap {
+	display: flex;
+	width: 50%;
+	height: 100%;
+}
+
+.buttonBox {
+	display: flex;
+	justify-content: flex-start;
 }
 
 .vertAlign {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
+	margin-left: 25px;
 }
 
 .content {
-	margin-top: 25px;
-}
-
-.seeProfileBox {
 	margin-top: 25px;
 }
 
@@ -46,7 +61,7 @@
 		margin-top: 20px;
 	}
 
-	.searchBox {
+	.contentBox {
 		width: 100%;
 		flex-direction: column;
 	}
@@ -54,6 +69,17 @@
 	.seeProfileBox {
 		width: 50%;
 		margin: 20px auto 0;
+	}
+
+	.buttonBoxWrap {
+		width: 100%;
+		margin: auto;
+	}
+
+	.buttonBox {
+		width: 100%;
+		margin: auto;
+		flex-direction: column;
 	}
 
 }

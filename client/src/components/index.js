@@ -12,3 +12,5 @@ export { default as Toggle } from './toggle.js';
 export { default as Settings } from './settings.js';
 export { default as Feed } from './feed.js';
 export { default as TextInput } from './textInput.js';
+export { default as Search } from './search.js';
+export { default as SearchResults } from './searchResults.js';

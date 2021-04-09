@@ -48,6 +48,43 @@ router.get('/login', (req, res) => {
 
 });
 
+router.get('/update', async (req, res) => {
+
+	const usersQuery = `select user_id, refresh_token from users;`;
+	const updateQuery = `insert into users (user_id, refresh_token, display_name) values ($1, $2, $3)
+	ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token, display_name = EXCLUDED.display_name;`;
+
+	try {
+
+		const allUsers = await client.query(usersQuery);
+		for (const row of allUsers.rows) {
+			const { user_id, refresh_token } = row;
+			const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refresh_token);
+			const { access_token, token_type } = accessRes.data;
+
+			// const userRes = await getOtherUser(token_type, access_token, id); 
+
+			const userRes = await getUser(token_type, access_token);
+
+			const { display_name } = userRes.data;
+
+			await client.query(updateQuery, [ user_id, refresh_token, display_name ]);
+
+		}
+
+		res.send({
+			success: true
+		});
+
+	} catch (err) {
+		console.log(err);
+
+		res.send({
+			success: false
+		});
+	}
+
+})
 
 // Login/auth callback
 router.get('/callback', async (req, res) => {
@@ -62,12 +99,14 @@ router.get('/callback', async (req, res) => {
 
 		const userRes = await getUser(token_type, access_token);
 
-		const id = userRes.data.id;
+		const { id, display_name } = userRes.data;
 
-		const query = `insert into users (user_id, refresh_token) values ($1, $2)
-									ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token;`;
+		const query = `insert into users (user_id, refresh_token, display_name) values ($1, $2, $3)
+									ON CONFLICT (user_id) DO UPDATE
+									SET refresh_token = EXCLUDED.refresh_token,
+									display_name = EXCLUDED.display_name;`;
 
-		const queryRes = await client.query(query, [ id, refresh_token ]);
+		const queryRes = await client.query(query, [ id, refresh_token, display_name ]);
 		console.log('Created user: ' + id);
 
 		const jwtToken = generateAccessToken({ id: id });
@@ -104,7 +143,6 @@ router.get('/account/:id', authenticateToken, async (req, res) => {
 
 		try {
 			const queryRes = await client.query(query, [ id ]);
-			console.log(queryRes.rows);
 			if (queryRes.rows.length === 0) {
 				res.sendStatus(404); // If id doesn't exist in table
 			}
@@ -200,9 +238,7 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
 		const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
 
-		console.log(followingFollowerQuery);
 		const followingFollowerRes = await client.query(followingFollowerQuery, following);
-		console.log(followingFollowerRes.rows);
 		const adjUsers = followingFollowerRes.rows.map(row => { return row.user_id });
 		// Counts
 		const counts = {};
@@ -248,6 +284,32 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		});
 
 	}
+});
+
+router.get('/search', async (req, res) => {
+
+	const searchText = req.query.searchText.split(' ')[0];
+
+	const searchQuery = `select user_id, display_name from users
+											 where to_tsvector(concat(user_id, ' ', display_name)) @@ to_tsquery($1)
+											 or upper(user_id) like upper(concat($1, '%'))
+											 or upper(display_name) like upper(concat($1, '%'));`;
+
+	try {
+
+		const searchRes = await client.query(searchQuery, [ searchText ]);
+	
+		res.send({
+			searchRes: searchRes.rows
+		});
+
+	} catch (err) {
+		console.log(err);
+		res.send({
+			success: false
+		});
+	}
+
 })
 
 // JWT Auth check
