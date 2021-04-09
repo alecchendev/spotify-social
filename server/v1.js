@@ -48,6 +48,44 @@ router.get('/login', (req, res) => {
 
 });
 
+router.get('/update', async (req, res) => {
+
+	const usersQuery = `select user_id, refresh_token from users;`;
+	const updateQuery = `insert into users (user_id, refresh_token, display_name) values ($1, $2, $3)
+	ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token, display_name = EXCLUDED.display_name;`;
+
+	try {
+
+		const allUsers = await client.query(usersQuery);
+		for (const row of allUsers.rows) {
+			console.log(row);
+			const { user_id, refresh_token } = row;
+			const accessRes = await getAuth(clientId, clientSecret, 'refresh_token', '', '', refresh_token);
+			const { access_token, token_type } = accessRes.data;
+
+			// const userRes = await getOtherUser(token_type, access_token, id); 
+
+			const userRes = await getUser(token_type, access_token);
+
+			const { display_name } = userRes.data;
+
+			await client.query(updateQuery, [ user_id, refresh_token, display_name ]);
+
+		}
+
+		res.send({
+			success: true
+		});
+
+	} catch (err) {
+		console.log(err);
+
+		res.send({
+			success: false
+		});
+	}
+
+})
 
 // Login/auth callback
 router.get('/callback', async (req, res) => {
@@ -62,12 +100,14 @@ router.get('/callback', async (req, res) => {
 
 		const userRes = await getUser(token_type, access_token);
 
-		const id = userRes.data.id;
+		const { id, display_name } = userRes.data;
 
-		const query = `insert into users (user_id, refresh_token) values ($1, $2)
-									ON CONFLICT (user_id) DO UPDATE SET refresh_token = EXCLUDED.refresh_token;`;
+		const query = `insert into users (user_id, refresh_token, display_name) values ($1, $2, $3)
+									ON CONFLICT (user_id) DO UPDATE
+									SET refresh_token = EXCLUDED.refresh_token,
+									display_name = EXCLUDED.display_name;`;
 
-		const queryRes = await client.query(query, [ id, refresh_token ]);
+		const queryRes = await client.query(query, [ id, refresh_token, display_name ]);
 		console.log('Created user: ' + id);
 
 		const jwtToken = generateAccessToken({ id: id });
