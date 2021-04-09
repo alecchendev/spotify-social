@@ -43,31 +43,34 @@ export default function Home() {
 				{/* <TextInput className={styles.searchInput} type='text' placeholder='Username' onChange={handleChange} /> */}
 				<div className={styles.searchBox}>
 					<Search search={handleSearch} />
+					<div className={styles.contentBox2}>
+					{
+						(typeof searchResults === 'string' || searchResults instanceof String)
+						?
+						<Text className={styles.searchMessage}>{searchResults}</Text>
+						:
+						(searchResults.length !== 0)
+						&&
+						<div className={styles.searchResultsBox} >
+							<SearchResults searchResults={searchResults} />
+						</div>
+					}
+					</div>
+
 				</div>
-				<div className={styles.vertAlign}>
-					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
-				</div>
-				<div className={styles.vertAlign}>
-					<a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
+
+				<div className={styles.buttonBoxWrap}>
+					<div className={styles.buttonBox}>
+						<div className={styles.vertAlign}>
+							<Link to={'/i0yd9nkk6k6nszblfxjr5y0qa'}><Button className={utilStyles.btnGreen}>See a profile</Button></Link>
+						</div>
+						<div className={styles.vertAlign}>
+							<a href={url + '/' + API_VERSION + '/login'}><Button className={utilStyles.btnGreen}>Login</Button></a>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div className={styles.contentBox2}>
-			{
-				(typeof searchResults === 'string' || searchResults instanceof String)
-				?
-				<Text>{searchResults}</Text>
-				:
-				(searchResults.length !== 0)
-				?
-				<div className={styles.searchResultsBox} >
-					<SearchResults searchResults={searchResults} />
-				</div>
-				:
-				<div className={styles.seeProfileBox}>
-					<Link to={'/i0yd9nkk6k6nszblfxjr5y0qa'}><Button className={utilStyles.btnGreen}>See a profile</Button></Link>
-				</div>
-			}
-			</div>
+
 			<div className={styles.content}>
 				{
 					deleted
