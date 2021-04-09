@@ -288,6 +288,32 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		});
 
 	}
+});
+
+router.get('/search', async (req, res) => {
+
+	const { searchText } = req.query;
+
+	const searchQuery = `select user_id, display_name from users
+											 where to_tsvector(concat(user_id, ' ', display_name)) @@ to_tsquery($1)
+											 or upper(user_id) like upper(concat($1, '%'))
+											 or upper(display_name) like upper(concat($1, '%'));`;
+
+	try {
+
+		const searchRes = await client.query(searchQuery, [ searchText ]);
+	
+		res.send({
+			searchRes: searchRes.rows
+		});
+
+	} catch (err) {
+		console.log(err);
+		res.send({
+			success: false
+		});
+	}
+
 })
 
 // JWT Auth check
