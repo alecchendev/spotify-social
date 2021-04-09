@@ -39,9 +39,6 @@ export default function Explore({ reccs, follow }) {
 				<div className={styles.searchInput} >
 					<Search className={styles.searchInput} search={handleSearch} />
 				</div>
-				<div className={styles.searchBtnBox + ' ' + styles.vertAlign}>
-					<Link to={'/' + search}><Button className={utilStyles.btnGreen}>Search</Button></Link>
-				</div>
 			</div>
 
 			<div className={styles.contentBox}>
