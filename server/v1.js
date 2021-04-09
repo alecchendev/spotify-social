@@ -288,7 +288,7 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 
 router.get('/search', async (req, res) => {
 
-	const { searchText } = req.query;
+	const searchText = req.query.searchText.split(' ')[0];
 
 	const searchQuery = `select user_id, display_name from users
 											 where to_tsvector(concat(user_id, ' ', display_name)) @@ to_tsquery($1)
