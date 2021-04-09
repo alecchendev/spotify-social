@@ -1,0 +1,16 @@
+
+
+.searchResult {
+	margin-bottom: 10px;
+}
+
+.searchLink {
+	text-decoration: none;
+	color: white;
+	transition: 0.25s;
+	word-break: break-word;
+}
+
+.searchLink:hover {
+	color: var(--green);
+}
