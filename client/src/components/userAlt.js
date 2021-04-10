@@ -8,6 +8,7 @@ import React from 'react';
 export default function User({ item, follow }) {
 
 	const nowItem = item.current === '' ? item.recent.items[0].track : item.current.item;
+	const nowArtists = nowItem.artists ? nowItem.artists.map(artist => artist.name).join(', ') : '';
 
 	const [ following, setFollowing ] = React.useState(false);
 
@@ -71,8 +72,8 @@ export default function User({ item, follow }) {
 
 				</div>
 
-				<Text className={styles.nowName}>{nowItem.name}</Text>
-				<Subtext className={styles.nowArtist}>{nowItem.artists && nowItem.artists.map(artist => artist.name).join(', ')}</Subtext>
+				<Text className={styles.nowName}>{nowItem.name && (nowItem.name.length <= 20 ? nowItem.name : nowItem.name.slice(0, 17) + '...')}</Text>
+				<Subtext className={styles.nowArtist}>{nowArtists.length <= 23 ? nowArtists : nowArtists.slice(0, 20) + '...'}</Subtext>
 
 			</div>
 

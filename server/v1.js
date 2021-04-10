@@ -30,6 +30,7 @@ const scope = [
 	'user-read-currently-playing',
 	'user-read-recently-played'
 ].join(' ');
+const reccLimit = 8;
 
 // Use endpoints for following
 router.use('/follow', followApi);
@@ -241,11 +242,19 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 
 			const notFollowingQuery = `select user_id from users;`;
 			const notFollowingRes = await client.query(notFollowingQuery, following);
-			newReccs = notFollowingRes.rows.map(row => row.user_id);
+			const tempReccs = notFollowingRes.rows.map(row => row.user_id);
+			const tempReccsLength = tempReccs.length;
+
+			for (let i = 0; i < Math.min(reccLimit, tempReccsLength); i++) {
+				const idx = Math.floor(Math.random() * tempReccs.length);
+				newReccs.push(tempReccs[idx]);
+				tempReccs.splice(idx, 1);
+			}
 
 			res.send({
 				reccs: newReccs
 			});
+
 		} else {
 
 			const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
@@ -264,10 +273,31 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 				counts[userId] += 1;
 			});
 
-			var reccs = [];
+			const adjUserIds = Object.keys(counts);
+			if (adjUserIds.length !== 0) {
+
+				const adjFollowingParams = adjUserIds.map(adjUserId => '$' + (adjUserIds.indexOf(adjUserId) + 1).toString()).join(', ');
+				const adjFollowingQuery = `select following_id from following where user_id in (` + adjFollowingParams + `);`;
+
+				const adjFollowingRes = await client.query(adjFollowingQuery, adjUserIds);
+				const adjFollowing = adjFollowingRes.rows.map(row => { return row.following_id });
+
+				console.log(adjFollowing);
+
+				for (const followingId of adjFollowing) {
+					if (!(followingId in counts)) {
+						counts[followingId] = 0;
+					}
+					counts[followingId] += 1;
+				}
+
+			}
+
+			let reccs = [];
 			for (let userId in counts) {
 				reccs.push([userId, counts[userId]]);
 			}
+			
 			reccs.sort(function(a, b) {
 				return b[1] - a[1]; // descending sort
 			});
@@ -279,10 +309,14 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 				}
 			})
 
-			if (newReccs.length === 0) {
+			if (newReccs.length < reccLimit) {
 				const notFollowingQuery = `select user_id from users where user_id not in (` + followingParams + `);`;
 				const notFollowingRes = await client.query(notFollowingQuery, following);
-				newReccs = notFollowingRes.rows.map(row => row.user_id);
+				notFollowingRes.rows.forEach(row => {
+					if (!newReccs.includes(row.user_id)) {
+						newReccs.push(row.user_id);
+					}
+				});
 			}
 
 			res.send({
