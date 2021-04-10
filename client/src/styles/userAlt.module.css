@@ -4,7 +4,7 @@
 .user {
 	display: flex;
 	flex-direction: column;
-	padding: 20px 5px;
+	padding: 20px 10px;
 }
 
 .user * {
@@ -72,6 +72,7 @@
 
 .nowName {
 	text-align: center;
+	word-break: break-all;
 }
 
 .nowArtist {
