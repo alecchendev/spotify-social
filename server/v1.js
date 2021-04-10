@@ -235,46 +235,61 @@ router.get('/reccommendations', authenticateToken, async (req, res) => {
 		console.log('Got following for user: ' + id);
 		const following = followingRes.rows.map(row => { return row.following_id });
 
-		const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
-		const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
-
-		const followingFollowerRes = await client.query(followingFollowerQuery, following);
-		const adjUsers = followingFollowerRes.rows.map(row => { return row.user_id });
-		// Counts
-		const counts = {};
-		adjUsers.sort();
-		adjUsers.forEach(userId => {
-			if (!(userId in counts)) {
-				counts[userId] = 0;
-			}
-			counts[userId] += 1;
-		});
-
-		var reccs = [];
-		for (let userId in counts) {
-			reccs.push([userId, counts[userId]]);
-		}
-		reccs.sort(function(a, b) {
-			return b[1] - a[1]; // descending sort
-		});
-
 		let newReccs = [];
-		reccs.forEach(recc => {
-			const userId = recc[0];
-			if (!following.includes(userId)) {
-				newReccs.push(userId);
-			}
-		})
 
-		if (newReccs.length === 0) {
-			const notFollowingQuery = `select user_id from users where user_id not in (` + followingParams + `);`;
+		if (following.length === 0) {
+
+			const notFollowingQuery = `select user_id from users;`;
 			const notFollowingRes = await client.query(notFollowingQuery, following);
 			newReccs = notFollowingRes.rows.map(row => row.user_id);
+
+			res.send({
+				reccs: newReccs
+			});
+		} else {
+
+			const followingParams = following.map(followingId => '$' + (following.indexOf(followingId) + 1).toString()).join(', ');
+
+			const followingFollowerQuery = `select user_id from following where following_id in (` + followingParams + `);`;
+
+			const followingFollowerRes = await client.query(followingFollowerQuery, following);
+			const adjUsers = followingFollowerRes.rows.map(row => { return row.user_id });
+			// Counts
+			const counts = {};
+			adjUsers.sort();
+			adjUsers.forEach(userId => {
+				if (!(userId in counts)) {
+					counts[userId] = 0;
+				}
+				counts[userId] += 1;
+			});
+
+			var reccs = [];
+			for (let userId in counts) {
+				reccs.push([userId, counts[userId]]);
+			}
+			reccs.sort(function(a, b) {
+				return b[1] - a[1]; // descending sort
+			});
+
+			reccs.forEach(recc => {
+				const userId = recc[0];
+				if (!following.includes(userId)) {
+					newReccs.push(userId);
+				}
+			})
+
+			if (newReccs.length === 0) {
+				const notFollowingQuery = `select user_id from users where user_id not in (` + followingParams + `);`;
+				const notFollowingRes = await client.query(notFollowingQuery, following);
+				newReccs = notFollowingRes.rows.map(row => row.user_id);
+			}
+
+			res.send({
+				reccs: newReccs
+			});
+
 		}
-    
-		res.send({
-			reccs: newReccs
-		});
 
 	} catch (err) {
 
