@@ -71,13 +71,21 @@ export default function Home() {
 				</div>
 			</div>
 
-			<div className={styles.content}>
+			<div className={styles.deleted}>
 				{
 					deleted
 					&&
 					<div>
 						<Text>{'Deleted user: ' + deleted}</Text>
 					</div>
+				}
+			</div>
+
+			<div className={styles.demo}>
+				{
+				(typeof searchResults !== 'string' && !(searchResults instanceof String) && searchResults.length === 0)
+				&&
+				<img className={styles.demoGif} src='/landingDemo.gif'/>
 				}
 			</div>
 		</div>
