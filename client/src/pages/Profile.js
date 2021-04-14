@@ -142,7 +142,7 @@ export default function Profile() {
 						<div className={styles.headerBox}>
 							<Kicker>Profile</Kicker>
 							<Heading>{profileData.user.display_name}</Heading>
-							<Text>{profileData.followerCount/*profileData.user.followers.total*/} Followers</Text>
+							<Text>{profileData.followerCount == 1 ? profileData.followerCount + " Follower" : profileData.followerCount + " Followers"}</Text>
 							<div className={styles.followCopyButtonBox}>
 									{
 										auth
