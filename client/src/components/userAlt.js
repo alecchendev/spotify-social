@@ -8,7 +8,7 @@ import React from 'react';
 export default function User({ item, follow }) {
 
 	const nowItem = item.current === '' ? (item.recent.items.length > 0 ? item.recent.items[0].track : null) : item.current.item;
-	const nowArtists = nowItem.artists ? nowItem.artists.map(artist => artist.name).join(', ') : '';
+	const nowArtists = nowItem ? (nowItem.artists ? nowItem.artists.map(artist => artist.name).join(', ') : '') : '';
 
 	const [ following, setFollowing ] = React.useState(false);
 
