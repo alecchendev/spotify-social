@@ -72,7 +72,7 @@ export default function User({ item, follow }) {
 
 				</div>
 
-				<Text className={styles.nowName}>{nowItem.name && (nowItem.name.length <= 20 ? nowItem.name : nowItem.name.slice(0, 17) + '...')}</Text>
+				<Text className={styles.nowName}>{nowItem && (nowItem.name.length <= 20 ? nowItem.name : nowItem.name.slice(0, 17) + '...')}</Text>
 				<Subtext className={styles.nowArtist}>{nowArtists.length <= 23 ? nowArtists : nowArtists.slice(0, 20) + '...'}</Subtext>
 
 			</div>
