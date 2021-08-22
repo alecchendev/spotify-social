@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 
 export default function User({ item }) {
 
-	const nowItem = item.current === '' ? item.recent.items[0].track : item.current.item;
+	const nowItem = item.current === '' ? (item.recent.items.length > 0 ? item.recent.items[0].track : {}) : item.current.item;
 	const recentLimit = 5;
 
 	return (<div className={styles.user}>

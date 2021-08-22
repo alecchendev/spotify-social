@@ -167,6 +167,8 @@ export default function Profile() {
 						(privateMode === false || me === true)
 						?
 						<div>
+							{profileData.current
+							&&
 							<div className={styles.current}>
 								{
 									profileData.current !== ''
@@ -185,6 +187,7 @@ export default function Profile() {
 									}
 								</div>
 							</div>
+							}
 
 							<div className={styles.top}>
 
