@@ -1,6 +1,8 @@
 # Spotify Social
 A simple web app to share and connect with friends on data pulled from the Spotify API.
 
+![Demo GIF](client/public/landingDemo.gif)
+
 ### Motive
 I'd been [messing around with the Spotify API](https://github.com/alecchendev/spotify-refresh-token)
 for a bit with the idea for this app in the back of my mind, and a friend and I had started work on a
